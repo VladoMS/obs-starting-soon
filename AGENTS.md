@@ -6,8 +6,13 @@ Live, looping HTML overlay for **OBS Browser Source** (1920×1080). Powering the
 
 ```
 obs-starting-soon/
-├── index.html              single-file overlay engine (JS, HTML shell)
+├── index.html              overlay shell (HTML + inline bootstrap)
 ├── core.css                shared structural CSS (background stack, headline, blooms)
+├── js/                     extracted engine modules
+│   ├── config.js           query params, THEMES config, OVERLAY bridge
+│   ├── audio.js            playlist + Web Audio API analyser
+│   ├── backgrounds.js      A/B crossfade background rotation
+│   └── engine.js           headline builder, intro, tick loop, init
 ├── htmx.min.js             loads theme HUD fragments dynamically
 ├── gsap.min.js             one-shot intro animation
 ├── docker-compose.yml      nginx:alpine — serve over HTTP (required for audio context)

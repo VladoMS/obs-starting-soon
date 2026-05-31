@@ -84,20 +84,37 @@ Combine freely: `?q=Ending&bg=15&theme=wwm&nofx=1`
 
 ```
 obs-starting-soon/
-├── index.html            engine + HTML shell
-├── core.css              shared structural styles
-├── htmx.min.js           dynamic HUD loading
-├── gsap.min.js           intro animation
-├── docker-compose.yml    nginx:alpine
-└── themes/
-    ├── vladoms/          operator HUD
-    │   ├── theme.css     operator skin
-    │   ├── theme.js      equalizer + OBS telemetry
-    │   ├── hud.html      HUD markup
-    │   ├── backgrounds/  15 game JPGs
-    │   └── songs/        8 audio tracks
-    ├── kaiyo/            synthwave HUD
-    └── wwm/              wuxia theme
+├── index.html              overlay shell (HTML + inline bootstrap)
+├── core.css                shared structural CSS (background stack, headline, blooms)
+├── js/                     extracted engine modules
+│   ├── config.js           query params, THEMES config, OVERLAY bridge
+│   ├── audio.js            playlist + Web Audio API analyser
+│   ├── backgrounds.js      A/B crossfade background rotation
+│   └── engine.js           headline builder, intro, tick loop, init
+├── htmx.min.js             loads theme HUD fragments dynamically
+├── gsap.min.js             one-shot intro animation
+├── docker-compose.yml      nginx:alpine — serve over HTTP (required for audio context)
+│
+└── themes/                 self-contained theme presets
+    ├── vladoms/            "Eve" operator HUD (default, by @vlado_ms)
+    │   ├── theme.css       operator skin: red/cyan/void palette
+    │   ├── theme.js        equalizer, OBS WebSocket telemetry, status cluster
+    │   ├── hud.html        HTML fragment for htmx
+    │   ├── backgrounds.json  15 game entries (src, tint, placeholder fallback)
+    │   ├── playlist.json     8 tracks (shuffled, looped)
+    │   ├── backgrounds/      *.jpg composites
+    │   └── songs/            *.wav / *.mp3
+    ├── kaiyo/              KAIYO//SHARD synthwave HUD
+    │   ├── theme.css       amber/magenta/cyan palette, Nexus FUI accents
+    │   ├── theme.js        perspective grid, icosahedron, pulse rows
+    │   ├── hud.html        HTML fragment
+    │   ├── *.mp4           muted looping background video
+    │   └── *.mp3           single looped track
+    └── wwm/                Where Winds Meet wuxia theme
+        ├── theme.css       jade/gold/ink palette, double-frame chrome
+        ├── hud.html        HTML fragment (no JS)
+        ├── logo.png
+        └── *.mp4           looping video (song from file)
 ```
 
 ### Design decisions
