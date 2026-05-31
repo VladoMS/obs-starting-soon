@@ -13,7 +13,7 @@ obs-starting-soon/
 ├── docker-compose.yml      nginx:alpine — serve over HTTP (required for audio context)
 │
 ├── themes/                 self-contained theme presets
-│   ├── vladoms/            VLADO.OS "Eve" operator HUD (default)
+│   ├── vladoms/            "Eve" operator HUD (default, by @vlado_ms)
 │   │   ├── theme.css       operator skin: red/cyan/void palette
 │   │   ├── theme.js        equalizer, OBS WebSocket telemetry, status cluster
 │   │   ├── hud.html        HTML fragment for htmx
@@ -47,7 +47,7 @@ Pick with `?theme=vladoms|kaiyo|wwm` (default `vladoms`). Each theme is self-con
 
 | Theme | HUD Style | Background Mode | Audio Source |
 |---|---|---|---|
-| `vladoms` (default) | VLADO.OS "Eve" operator — red/cyan, top bar, broadcast panel, 48-bar FFT equalizer, OBS telemetry | Rotating game backgrounds | Shuffled playlist (8 tracks) |
+| `vladoms` (default) | "Eve" operator HUD — red/cyan, top bar, broadcast panel, 48-bar FFT equalizer, OBS telemetry | Rotating game backgrounds | Shuffled playlist (8 tracks) |
 | `kaiyo` | Synthwave — amber/magenta, SYS/NET/AUD pulses, wireframe icosahedron, Nexus FUI | Muted looping video | Single looped track |
 | `wwm` | Wuxia — jade/gold double-frame, ornamental corners, logo | Looping video (song from file) | Video audio |
 

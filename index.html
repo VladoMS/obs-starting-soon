@@ -17,7 +17,7 @@
         ?volume=0.5            override default volume (0..1)
         ?nointro=1             skip the entrance animation
         ?theme=ID              choose a preset (default "vladoms"):
-                               vladoms → VLADO.OS "Eve" operator HUD over the rotating
+                               vladoms → "Eve" operator HUD (by @vlado_ms) over the rotating
                                          game backgrounds + shuffled playlist. Auto-connects
                                          to OBS WebSocket (ws://localhost:4455) and fills the
                                          broadcast panel with live SIGNAL/BITRATE/UPTIME/FPS/
@@ -42,7 +42,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- ?style=v2 ("VLADO.OS / Eve" operator skin) fonts. Loaded always but only used by the v2 reskin. -->
+    <!-- ?theme=vladoms ("Eve" operator skin) fonts. Loaded always but only used by the vladoms theme. -->
     <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- Shared base CSS for every theme (structural overlay layers + headline). -->
     <link rel="stylesheet" href="core.css">
@@ -122,7 +122,7 @@
       // ============================================================
       // THEMES — the overlay's three presets (replaces the old ?style/?version).
       // Pick with ?theme=vladoms|kaiyo|wwm (default vladoms). Each theme decides:
-      //   hud      "eve" (VLADO.OS operator HUD) | "synthwave" (KAIYO//SHARD HUD)
+      //   hud      "eve" (operator HUD by @vlado_ms) | "synthwave" (KAIYO//SHARD HUD)
       //   rgbLine  accent for the JS-drawn grid/icosahedron (synthwave) "r, g, b"
       //   bg.mode  "rotating"    → backgrounds.json crossfade + playlist.json
       //            "video-muted" → looping muted bg video + a single looped track

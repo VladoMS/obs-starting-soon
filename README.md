@@ -2,10 +2,10 @@
 
 A live, looping HTML overlay for **OBS Browser Source** (1920×1080). Rotating game backgrounds, audio-reactive HUD, shuffled music playlist — all in one file.
 
-Powering the "BE RIGHT BACK / STARTING SOON / ENDING" scene for **[VLADO.OS](https://vladislavstoyanov.com/)** broadcasts.
+Powering the "BE RIGHT BACK / STARTING SOON / ENDING" scene for **[@vlado_ms](https://www.twitch.tv/vlado_ms)** on Twitch.
 
 ![Theme: vladoms](docs/screenshot-vladoms.png)
-<br>*The VLADO.OS "Eve" operator HUD — rotating game backgrounds, live OBS telemetry, 48-bar FFT equalizer*
+<br>*The "Eve" operator HUD — rotating game backgrounds, live OBS telemetry, 48-bar FFT equalizer*
 
 ---
 
@@ -59,7 +59,7 @@ Tip: combine query params — `http://localhost:8088/?q=Be%20Right%20Back&bg=15&
 
 | `?theme=` | HUD | Backgrounds | Audio |
 |---|---|---|---|
-| `vladoms` **(default)** | VLADO.OS "Eve" operator — red/cyan dashboard with top bar, broadcast panel, 48-bar spectrum, live OBS telemetry | 15 rotating game composites — MHGU, MGS2, FFXIV, Persona 5, Trails series, etc. | 8 shuffled tracks |
+| `vladoms` **(default)** | "Eve" operator HUD — red/cyan dashboard with top bar, broadcast panel, 48-bar spectrum, live OBS telemetry | 15 rotating game composites — MHGU, MGS2, FFXIV, Persona 5, Trails series, etc. | 8 shuffled tracks |
 | `kaiyo` | KAIYO//SHARD synthwave — amber/magenta pulse rows, wireframe icosahedron, Nexus FUI accents | Muted looping disco video | Single looped track |
 | `wwm` | Where Winds Meet wuxia — gold double-frame, ornamental corners, jade/ink palette | Looping video with song | Video audio |
 

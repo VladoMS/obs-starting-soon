@@ -1,5 +1,5 @@
 /* ==========================================================================
-   themes/vladoms/theme.js — VLADO.OS "Eve" operator HUD behaviour
+   themes/vladoms/theme.js — @vlado_ms "Eve" operator HUD behaviour
    Loaded by the head bootstrap after themes/vladoms/hud.html is swapped in.
    Builds + drives the 48-bar FFT spectrum equalizer and the AUX mini-eq, mirrors
    the now-playing text, runs the live status cluster (clock/UTC/latency/uptime),
