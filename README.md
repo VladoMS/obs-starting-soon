@@ -4,9 +4,6 @@ A live, looping HTML overlay for **OBS Browser Source** (1920×1080). Rotating g
 
 Powering the "BE RIGHT BACK / STARTING SOON / ENDING" scene for **[@vlado_ms](https://www.twitch.tv/vlado_ms)** on Twitch.
 
-![Theme: vladoms](docs/screenshot-vladoms.png)
-<br>*The "Eve" operator HUD — rotating game backgrounds, live OBS telemetry, 48-bar FFT equalizer*
-
 ---
 
 ## Features
