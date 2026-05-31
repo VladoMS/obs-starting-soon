@@ -18,7 +18,7 @@ const THEMES = {
       video: "themes/kaiyo/disco-16-echoes-first-light-loop-v3.mp4",
       plate: "themes/kaiyo/disco-16-echoes-first-light.png",
     },
-    track: { artist: "KISSA", title: "SUNS", src: "themes/kaiyo/KISSA__SUNS.mp3" },
+    track: { artist: "KAIYO//SHARD", title: "KISSA//SUNS", src: "themes/kaiyo/KISSA__SUNS.mp3" },
   },
   wwm: {
     hud: "eve", rgbLine: "54, 211, 154",
