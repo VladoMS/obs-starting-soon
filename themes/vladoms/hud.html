@@ -1,0 +1,63 @@
+<!-- themes/vladoms/hud.html — VLADO.OS "Eve" operator HUD fragment.
+     Loaded into #theme-hud by htmx for ?theme=vladoms, then driven by theme.js.
+     Styling: themes/vladoms/theme.css (html.hud-eve). -->
+<div id="eve-hud" aria-hidden="true">
+  <!-- top bar -->
+  <header class="eve-top">
+    <div class="eve-brand">
+      <svg class="eve-glyph" width="22" height="22" viewBox="0 0 32 32" fill="none">
+        <path d="M16 2l12 7v14l-12 7-12-7V9z" stroke="#ff3b1f" stroke-width="1.5" fill="rgba(255,59,31,0.08)"/>
+        <path d="M16 9l6 3.5v7L16 23l-6-3.5v-7z" fill="#ff3b1f" opacity="0.85"/>
+      </svg>
+      <span class="eve-brand-name">VLADO<span class="eve-brand-sub">.OS</span></span>
+    </div>
+    <span class="eve-div"></span>
+    <nav class="eve-crumbs">
+      <span class="eve-crumb"><i>RTE</i><b id="eve-rte">STARTING SOON</b></span>
+      <span class="eve-crumb"><i>DESIG</i><b>VLD.MS-01</b></span>
+      <span class="eve-crumb"><i>REGION</i><b>VELIKO TARNOVO / BG</b></span>
+    </nav>
+    <span class="eve-spacer"></span>
+    <div class="eve-status">
+      <span class="eve-stat"><i class="eve-dot"></i><span>LINK</span><b id="eve-lat">12 ms</b></span>
+      <span class="eve-stat"><i>UTC</i><b id="eve-utc">2026.05.31</b></span>
+      <span class="eve-stat eve-clock"><b id="eve-clock">00:00:00</b></span>
+    </div>
+  </header>
+
+  <!-- hero eyebrow + role flank the headline -->
+  <div class="eve-eyebrow"><span class="eve-eyebrow-dash"></span>OPERATOR // ONLINE · SIGNAL LIVE</div>
+  <div class="eve-role">DEVOPS · STREAMER · RANGED-MAIN — STAND BY</div>
+
+  <!-- bottom-right framed broadcast panel -->
+  <div class="eve-panel">
+    <span class="eve-corner bl"></span><span class="eve-corner br"></span>
+    <div class="eve-panel-head">
+      <span class="eve-eyebrow sm"><span class="eve-eyebrow-dash"></span>BROADCAST</span>
+      <span class="eve-hex">VS</span>
+    </div>
+    <div class="eve-readout">
+      <div class="r"><span class="k">SIGNAL</span><span class="v live" id="eve-signal">LIVE</span></div>
+      <div class="r"><span class="k">BITRATE</span><span class="v" id="eve-bitrate">6000 kb/s</span></div>
+      <div class="r"><span class="k">UPTIME</span><span class="v" id="eve-uptime">00:00:00</span></div>
+      <div class="r"><span class="k">FPS</span><span class="v" id="eve-fps">—</span></div>
+      <div class="r"><span class="k">CPU</span><span class="v" id="eve-cpu">—</span></div>
+      <div class="r"><span class="k">DROP</span><span class="v" id="eve-drop">—</span></div>
+    </div>
+  </div>
+
+  <!-- music player widget (AUX equalizer is audio-reactive) -->
+  <div class="eve-mp">
+    <div class="eve-mp-aux"><span class="eve-mp-auxlabel">AUX</span><span class="eve-mp-eq"><i></i><i></i><i></i><i></i></span></div>
+    <div class="eve-mp-transport">
+      <svg class="b" width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><polygon points="9.5,1.5 3.5,6 9.5,10.5" fill="currentColor"/><rect x="2" y="1.5" width="1.5" height="9" fill="currentColor"/></svg>
+      <svg class="b play" width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><polygon points="2.5,1.5 10,6 2.5,10.5" fill="currentColor"/></svg>
+      <svg class="b" width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><polygon points="2.5,1.5 8.5,6 2.5,10.5" fill="currentColor"/><rect x="8.5" y="1.5" width="1.5" height="9" fill="currentColor"/></svg>
+    </div>
+    <div class="eve-mp-ticker"><div class="eve-mp-track"><span id="eve-np">—</span><span aria-hidden="true" id="eve-np2">—</span></div></div>
+    <div class="eve-mp-counter" id="eve-mp-counter">01/01</div>
+  </div>
+</div>
+
+<!-- centered FFT spectrum equalizer (bars built + driven by theme.js) -->
+<div class="eq-v2" id="eq-v2" aria-hidden="true"></div>

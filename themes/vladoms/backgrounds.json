@@ -1,0 +1,152 @@
+[
+  {
+    "id": "mhgu",
+    "game": "Monster Hunter Generations Ultimate",
+    "caption": "Hunter, Palicoes & Ace Hunters — LBG main",
+    "src": "themes/vladoms/backgrounds/mhgu.jpg",
+    "position": "center",
+    "size": "cover",
+    "tint": ["rgba(20,40,15,0.45)", "rgba(40,28,10,0.55)"],
+    "placeholder": "radial-gradient(circle at 30% 35%, rgba(140,200,90,0.55), transparent 55%), radial-gradient(circle at 75% 70%, rgba(230,160,60,0.45), transparent 55%), linear-gradient(160deg, #1a2810 0%, #2a1d08 60%, #14210c 100%)"
+  },
+  {
+    "id": "mgs2",
+    "game": "Metal Gear Solid 2: Sons of Liberty",
+    "caption": "Solid Snake & Raiden — Big Shell incident",
+    "src": "themes/vladoms/backgrounds/mgs2.jpg",
+    "position": "center",
+    "size": "cover",
+    "tint": ["rgba(28,30,18,0.55)", "rgba(58,40,20,0.45)"],
+    "placeholder": "repeating-linear-gradient(45deg, rgba(245,197,42,0.12) 0 20px, rgba(245,197,42,0) 20px 42px), repeating-linear-gradient(135deg, rgba(0,0,0,0.18) 0 60px, rgba(0,0,0,0) 60px 120px), linear-gradient(180deg, #2c2818 0%, #161611 100%)"
+  },
+  {
+    "id": "where-winds-meet",
+    "game": "Where Winds Meet",
+    "caption": "Wandering swordsman — wuxia open world",
+    "src": "themes/vladoms/backgrounds/where-winds-meet.jpg",
+    "position": "center",
+    "size": "cover",
+    "tint": ["rgba(14,42,40,0.5)", "rgba(40,52,38,0.5)"],
+    "placeholder": "repeating-linear-gradient(90deg, rgba(0,0,0,0) 0 80px, rgba(0,0,0,0.18) 80px 84px), radial-gradient(ellipse at 50% 70%, rgba(60,180,140,0.4), transparent 60%), linear-gradient(180deg, #0c2a28 0%, #16322a 50%, #2a3a30 100%)"
+  },
+  {
+    "id": "division-2",
+    "game": "Tom Clancy's The Division 2",
+    "caption": "SHD agent — Washington DC, autumn",
+    "src": "themes/vladoms/backgrounds/division-2.jpg",
+    "position": "center",
+    "size": "cover",
+    "tint": ["rgba(36,20,4,0.55)", "rgba(58,32,16,0.5)"],
+    "placeholder": "radial-gradient(circle at 40% 65%, rgba(255,140,40,0.55), transparent 55%), repeating-linear-gradient(0deg, rgba(255,255,255,0.04) 0 1px, rgba(0,0,0,0) 1px 40px), repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0 1px, rgba(0,0,0,0) 1px 40px), linear-gradient(160deg, #2a1808 0%, #1a200e 100%)"
+  },
+  {
+    "id": "ffxiv",
+    "game": "Final Fantasy XIV",
+    "caption": "Warrior of Light & Scions of the Seventh Dawn",
+    "src": "themes/vladoms/backgrounds/ffxiv.jpg",
+    "position": "center",
+    "size": "cover",
+    "tint": ["rgba(16,10,42,0.55)", "rgba(28,16,64,0.5)"],
+    "placeholder": "radial-gradient(circle at 50% 35%, rgba(180,140,255,0.55), transparent 55%), radial-gradient(circle at 50% 78%, rgba(255,210,90,0.32), transparent 55%), radial-gradient(circle at 18% 18%, rgba(255,255,255,0.6), transparent 1.6%), radial-gradient(circle at 82% 28%, rgba(255,255,255,0.5), transparent 1.4%), radial-gradient(circle at 30% 80%, rgba(255,255,255,0.5), transparent 1.2%), linear-gradient(180deg, #0e0a2a 0%, #1c1040 100%)"
+  },
+  {
+    "id": "trails-in-the-sky",
+    "game": "Trails in the Sky",
+    "caption": "Bracer alongside Estelle & Joshua",
+    "src": "themes/vladoms/backgrounds/trails-in-the-sky.jpg",
+    "position": "center",
+    "size": "cover",
+    "tint": ["rgba(40,80,140,0.4)", "rgba(180,160,90,0.35)"],
+    "placeholder": "radial-gradient(ellipse at 30% 25%, rgba(255,255,255,0.5), transparent 30%), radial-gradient(ellipse at 70% 30%, rgba(255,255,255,0.4), transparent 28%), linear-gradient(180deg, #6fb8ff 0%, #aee4ff 35%, #ffe9b6 75%, #f5c542 100%)"
+  },
+  {
+    "id": "trails-from-zero",
+    "game": "Trails from Zero",
+    "caption": "SSS — Crossbell Special Support Section",
+    "src": "themes/vladoms/backgrounds/trails-from-zero.jpg",
+    "position": "center",
+    "size": "cover",
+    "tint": ["rgba(20,50,90,0.5)", "rgba(70,30,60,0.45)"],
+    "placeholder": "radial-gradient(circle at 30% 30%, rgba(60,140,220,0.40), transparent 55%), radial-gradient(circle at 75% 80%, rgba(255,90,90,0.30), transparent 55%), linear-gradient(180deg, #142a4a 0%, #2a1430 100%)"
+  },
+  {
+    "id": "trails-of-cold-steel",
+    "game": "Trails of Cold Steel",
+    "caption": "Class VII — Rean Schwarzer & friends",
+    "src": "themes/vladoms/backgrounds/trails-of-cold-steel.jpg",
+    "position": "center",
+    "size": "cover",
+    "tint": ["rgba(36,8,8,0.55)", "rgba(70,16,16,0.5)"],
+    "placeholder": "radial-gradient(circle at 50% 50%, rgba(220,30,30,0.45), transparent 55%), repeating-linear-gradient(0deg, rgba(0,0,0,0) 0 18px, rgba(0,0,0,0.18) 18px 19px), linear-gradient(160deg, #2a0606 0%, #4a0c0c 60%, #1a0606 100%)"
+  },
+  {
+    "id": "yakuza",
+    "game": "Yakuza (0-6)",
+    "caption": "Kazuma Kiryu & Goro Majima — Kamurocho",
+    "src": "themes/vladoms/backgrounds/yakuza.jpg",
+    "position": "center",
+    "size": "cover",
+    "tint": ["rgba(28,8,8,0.55)", "rgba(16,16,16,0.55)"],
+    "placeholder": "radial-gradient(circle at 50% 50%, rgba(220,30,30,0.45), transparent 50%), radial-gradient(circle at 80% 80%, rgba(255,210,40,0.20), transparent 55%), linear-gradient(180deg, #1a0608 0%, #0c0c0c 100%)"
+  },
+  {
+    "id": "like-a-dragon",
+    "game": "Like a Dragon",
+    "caption": "Ichiban & the party — Yokohama Ijincho",
+    "src": "themes/vladoms/backgrounds/like-a-dragon.jpg",
+    "position": "center",
+    "size": "cover",
+    "tint": ["rgba(26,4,32,0.55)", "rgba(44,8,48,0.5)"],
+    "placeholder": "radial-gradient(circle at 25% 70%, rgba(255,40,180,0.45), transparent 50%), radial-gradient(circle at 75% 30%, rgba(255,210,40,0.35), transparent 50%), radial-gradient(circle at 50% 90%, rgba(0,200,220,0.30), transparent 55%), linear-gradient(180deg, #1a0420 0%, #2c0830 100%)"
+  },
+  {
+    "id": "judgment",
+    "game": "Judgment / Lost Judgment",
+    "caption": "Yagami & Kaito — Kamurocho & Ijincho",
+    "src": "themes/vladoms/backgrounds/judgment.jpg",
+    "position": "center",
+    "size": "cover",
+    "tint": ["rgba(28,8,8,0.55)", "rgba(16,16,16,0.55)"],
+    "placeholder": "radial-gradient(circle at 50% 50%, rgba(220,30,30,0.45), transparent 50%), radial-gradient(circle at 80% 80%, rgba(255,210,40,0.20), transparent 55%), linear-gradient(180deg, #1a0608 0%, #0c0c0c 100%)"
+  },
+  {
+    "id": "horizon-zero-dawn",
+    "game": "Horizon Zero Dawn",
+    "caption": "Aloy & the Nora — old world ruins",
+    "src": "themes/vladoms/backgrounds/horizon-zero-dawn.jpg",
+    "position": "center",
+    "size": "cover",
+    "tint": ["rgba(36,18,8,0.5)", "rgba(14,40,40,0.5)"],
+    "placeholder": "radial-gradient(circle at 70% 28%, rgba(255,180,80,0.55), transparent 50%), radial-gradient(circle at 30% 90%, rgba(60,150,120,0.35), transparent 55%), linear-gradient(180deg, #1a3a4a 0%, #4a3020 45%, #2a3010 80%, #102810 100%)"
+  },
+  {
+    "id": "persona-5",
+    "game": "Persona 5",
+    "caption": "Phantom Thieves — Joker & co.",
+    "src": "themes/vladoms/backgrounds/persona-5.jpg",
+    "position": "center",
+    "size": "cover",
+    "tint": ["rgba(40,0,0,0.55)", "rgba(16,16,16,0.55)"],
+    "placeholder": "repeating-linear-gradient(-30deg, rgba(0,0,0,0) 0 70px, rgba(0,0,0,0.55) 70px 130px), linear-gradient(135deg, #d40020 0%, #6a0000 100%)"
+  },
+  {
+    "id": "uncharted",
+    "game": "Uncharted",
+    "caption": "Nathan Drake & Sully — fortune & glory",
+    "src": "themes/vladoms/backgrounds/uncharted.jpg",
+    "position": "center",
+    "size": "cover",
+    "tint": ["rgba(40,28,12,0.45)", "rgba(14,26,44,0.45)"],
+    "placeholder": "radial-gradient(circle at 70% 30%, rgba(255,210,140,0.4), transparent 50%), linear-gradient(180deg, #b6cce0 0%, #e8d099 42%, #c8a06a 70%, #6a4828 100%)"
+  },
+  {
+    "id": "zone-of-the-enders-2",
+    "game": "Zone of the Enders: The 2nd Runner",
+    "caption": "Dingo Egret & Jehuty — orbital frame",
+    "src": "themes/vladoms/backgrounds/zone-of-the-enders-2.jpg",
+    "position": "center",
+    "size": "cover",
+    "tint": ["rgba(4,18,42,0.55)", "rgba(8,24,58,0.5)"],
+    "placeholder": "radial-gradient(circle at 50% 60%, rgba(255,140,40,0.55), transparent 50%), radial-gradient(circle at 30% 30%, rgba(80,140,255,0.55), transparent 60%), radial-gradient(circle at 80% 25%, rgba(255,255,255,0.55), transparent 1.5%), linear-gradient(180deg, #04122a 0%, #08183a 100%)"
+  }
+]

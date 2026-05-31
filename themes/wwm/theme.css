@@ -1,0 +1,128 @@
+/* ==========================================================================
+   themes/wwm/theme.css — Where Winds Meet (wuxia) — standalone theme
+   Activated by html.theme-wwm (set by the head bootstrap for ?theme=wwm).
+   Self-contained: builds only on core.css, no dependency on the Eve HUD.
+
+   Design intent: the looping "Where Winds Meet" video is the star. The chrome
+   sits AROUND the footage — a refined gold double-frame with ornamental corner
+   brackets, a wind-swirl medallion seal, and minimal serif text. Restrained
+   ink/jade/gold wuxia palette, calm type. No tech HUD, no equalizer.
+   ==========================================================================
+
+   Palette (from the Where Winds Meet brand):
+     ink/charcoal  #12140f   jade  #4caf8e / deep #2e7d68
+     gold leaf     #c8a44d   paper #efe7d4   mist #d8cfb8
+*/
+
+/* Safety net: hide other themes' chrome in case they leak into the DOM. */
+html.theme-wwm .hud,
+html.theme-wwm .hud-br,
+html.theme-wwm .nexus-tx,
+html.theme-wwm .nexus-hex-ring,
+html.theme-wwm .nexus-core,
+html.theme-wwm .nexus-corner,
+html.theme-wwm .grid-floor,
+html.theme-wwm #eve-hud,
+html.theme-wwm .eq-v2 { display: none !important; }
+
+html.theme-wwm, html.theme-wwm body { background: #07080a; }
+html.theme-wwm [data-composition-id="main"] { background: #07080a; }
+
+/* Soft ink-wash vignette — darkens only the top and bottom edges so the centre
+   of the video stays clear. Replaces the operator grid/red vignette entirely. */
+html.theme-wwm .bg-tint {
+  background:
+    linear-gradient(180deg, rgba(7,8,10,0.62) 0%, rgba(7,8,10,0.0) 22%, rgba(7,8,10,0.0) 72%, rgba(7,8,10,0.74) 100%),
+    radial-gradient(ellipse 120% 90% at 50% 50%, transparent 52%, rgba(7,8,10,0.45) 100%);
+}
+
+/* ---- Headline moved to bottom-center, small audio-reactive italic. ---- */
+html.theme-wwm .center-col {
+  left:0; right:0; bottom:58px; height:auto;
+}
+html.theme-wwm .headline-wrap { text-align:center; }
+html.theme-wwm .headline,
+html.theme-wwm .headline-slice {
+  font-family:"Cormorant Garamond", "Georgia", serif;
+  font-style:italic; font-size:36px; letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:rgba(216,207,184,0.72);
+  text-shadow:0 2px 14px rgba(0,0,0,0.6);
+}
+html.theme-wwm .headline {
+  text-shadow:
+    var(--rgb-r-x) var(--rgb-r-y) 0 rgba(200,164,77,0.45),
+    var(--rgb-c-x) var(--rgb-c-y) 0 rgba(76,175,142,0.40),
+    0 2px 14px rgba(0,0,0,0.6);
+}
+html.theme-wwm .headline-slice {
+  text-shadow:-2px 0 0 rgba(200,164,77,0.40), 2px 0 0 rgba(76,175,142,0.35);
+}
+
+/* =============== WWM chrome =============== */
+#wwm-hud { display:none; }
+html.theme-wwm #wwm-hud {
+  display:block; position:absolute; inset:0; z-index:45; pointer-events:none;
+  font-family:"Cormorant Garamond", "Georgia", serif; color:#efe7d4;
+}
+
+/* ---- Double frame — outer hairline + inner subtle border ---- */
+.wwm-frame-outer {
+  position:absolute; inset:28px;
+  border:1px solid rgba(200,164,77,0.28);
+  box-shadow:
+    0 0 8px rgba(200,164,77,0.06),
+    0 0 0 1px rgba(7,8,10,0.35) inset;
+  transition: border-color 0.8s ease;
+}
+.wwm-frame-inner {
+  position:absolute; inset:34px;
+  border:1px solid rgba(200,164,77,0.10);
+}
+
+/* ---- Ornamental corner brackets — inspired by East Asian lattice work ---- */
+.wwm-corner {
+  position:absolute; width:52px; height:52px;
+  border-style:solid;
+  border-color:rgba(200,164,77,0.65);
+}
+.wwm-corner-tl { top:26px; left:26px; border-width:2px 0 0 2px; }
+.wwm-corner-tr { top:26px; right:26px; border-width:2px 2px 0 0; }
+.wwm-corner-bl { bottom:26px; left:26px; border-width:0 0 2px 2px; }
+.wwm-corner-br { bottom:26px; right:26px; border-width:0 2px 2px 0; }
+/* Inner tick at each corner — a short secondary line parallel to the main arm. */
+.wwm-corner::before {
+  content:""; position:absolute;
+  border-style:solid;
+  border-color:rgba(200,164,77,0.28);
+}
+.wwm-corner-tl::before { top:8px; left:8px; width:28px; height:28px; border-width:1px 0 0 1px; }
+.wwm-corner-tr::before { top:8px; right:8px; width:28px; height:28px; border-width:1px 1px 0 0; }
+.wwm-corner-bl::before { bottom:8px; left:8px; width:28px; height:28px; border-width:0 0 1px 1px; }
+.wwm-corner-br::before { bottom:8px; right:8px; width:28px; height:28px; border-width:0 1px 1px 0; }
+
+/* ---- Game logo — top-right, official Where Winds Meet wordmark. ---- */
+.wwm-logo {
+  position:absolute; top:54px; right:58px;
+  width:auto; height:40px;
+  opacity:0.80;
+  filter:drop-shadow(0 0 12px rgba(0,0,0,0.5));
+}
+
+/* ---- Title kicker — top-centre, small caps over the video. ---- */
+.wwm-kicker {
+  position:absolute; top:66px; left:50%; transform:translateX(-50%);
+  font-family:"Cinzel", "Georgia", serif; font-weight:600;
+  font-size:18px; letter-spacing:0.48em; text-transform:uppercase;
+  color:#e8dcc0; white-space:nowrap;
+  text-shadow:0 2px 16px rgba(0,0,0,0.6);
+}
+.wwm-kicker::before,
+.wwm-kicker::after {
+  content:""; display:inline-block; vertical-align:middle;
+  width:40px; height:1px;
+  background:rgba(200,164,77,0.25);
+  margin:0 18px;
+}
+
+

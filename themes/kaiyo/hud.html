@@ -1,0 +1,78 @@
+<!-- themes/kaiyo/hud.html — KAIYO//SHARD synthwave HUD fragment.
+     Loaded into #theme-hud by htmx for ?theme=kaiyo, then driven by theme.js.
+     Styling: themes/kaiyo/theme.css. -->
+<canvas id="grid-floor" class="grid-floor" width="1920" height="540"></canvas>
+
+<div class="hud hud-tl" id="hud-tl">
+  <div class="blink" id="hud-blink"></div>
+  <span>// VLADO_MS / KAIYO//SHARD BROADCAST</span>
+</div>
+<div class="hud hud-tr" id="hud-tr">
+  <div class="np">STANDBY</div>
+  <span class="underline"></span>
+</div>
+<div class="hud hud-bl" id="hud-bl">
+  <div class="pulse-row"><span class="label">SYS</span><div class="track"><div class="fill" id="pulse-1"></div></div></div>
+  <div class="pulse-row"><span class="label">NET</span><div class="track"><div class="fill" id="pulse-2"></div></div></div>
+  <div class="pulse-row"><span class="label">AUD</span><div class="track"><div class="fill" id="pulse-3"></div></div></div>
+</div>
+
+<!-- Nexus hex-flower ring backplate (rotating glyph behind the icosahedron). -->
+<div class="nexus-hex-ring" id="nexus-hex-ring" aria-hidden="true">
+  <svg viewBox="0 0 45.52 45.52" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M22.76,45.52l-5.26-3.04v-7.03l-4.97,4.97-5.86-1.57-1.57-5.86,4.97-4.97H3.03l-3.03-5.26,3.03-5.26h7.04l-4.97-4.97,1.57-5.86,5.86-1.57,4.97,4.97V3.04l5.26-3.04,5.26,3.04v7.03l4.97-4.97,5.86,1.57,1.57,5.86-4.97,4.97h7.03l3.03,5.26-3.03,5.26h-7.03l4.97,4.97-1.57,5.86-5.86,1.57-4.97-4.97v7.03l-5.26,3.04ZM18.5,41.91l4.26,2.46,4.26-2.46v-7.46l-4.26-2.46-4.26,2.46v7.46ZM7.48,38.04l4.75,1.27,5.27-5.27-1.27-4.75-4.75-1.27-5.27,5.27,1.27,4.75ZM28.02,34.04l5.27,5.27,4.75-1.27,1.27-4.75-5.27-5.27-4.75,1.27-1.27,4.75ZM22.76,30.84l4.26,2.46v-.26l.18.18,1.27-4.75,4.75-1.27-.18-.18h.26l-2.46-4.26,2.46-4.26h-.26l.18-.18-4.75-1.27-1.27-4.75-.18.18v-.26l-4.26,2.46-4.26-2.46v.26l-.18-.18-1.27,4.75-4.75,1.27.18.18h-.26l2.46,4.26-2.46,4.26h.26l-.18.18,4.75,1.27,1.27,4.75.18-.18v.26l4.26-2.46ZM34.45,27.02h7.46l2.46-4.26-2.46-4.26h-7.46l-2.46,4.26,2.46,4.26ZM3.61,27.02h7.46l2.46-4.26-2.46-4.26H3.61l-2.46,4.26,2.46,4.26ZM29.29,16.23l4.75,1.27,5.27-5.27-1.27-4.75-4.75-1.27-5.27,5.27,1.27,4.75ZM6.21,12.23l5.27,5.27,4.75-1.27,1.27-4.75-5.27-5.27-4.75,1.27-1.27,4.75ZM18.5,11.07l4.26,2.46,4.26-2.46V3.61l-4.26-2.46-4.26,2.46v7.46Z"/>
+  </svg>
+</div>
+
+<div class="hud-br" id="hud-br">
+  <canvas id="ico-canvas" width="320" height="320"></canvas>
+  <div class="label">// CORE</div>
+</div>
+
+<!-- Nexus transmission strip (top center) — broadcast ID + signal status. -->
+<div class="nexus-tx" id="nexus-tx" aria-hidden="true">
+  <div class="seg"><span class="dot"></span><span>TX</span><span class="id-num" id="nexus-tx-id">992-XX-AAA1</span></div>
+  <div class="seg"><span>SIGNAL</span><span class="live">LIVE</span></div>
+  <div class="seg"><span>NODE</span><span class="id-num">+0XAAEE7</span></div>
+</div>
+
+<!-- Nexus core radial gauge (above SYS/NET/AUD). Conic ring fills with bass. -->
+<div class="nexus-core" id="nexus-core" aria-hidden="true">
+  <div class="ring"></div>
+  <div class="glyph">
+    <svg viewBox="0 0 45.52 45.52" xmlns="http://www.w3.org/2000/svg">
+      <path fill="currentColor" d="M22.76,45.52l-5.26-3.04v-7.03l-4.97,4.97-5.86-1.57-1.57-5.86,4.97-4.97H3.03l-3.03-5.26,3.03-5.26h7.04l-4.97-4.97,1.57-5.86,5.86-1.57,4.97,4.97V3.04l5.26-3.04,5.26,3.04v7.03l4.97-4.97,5.86,1.57,1.57,5.86-4.97,4.97h7.03l3.03,5.26-3.03,5.26h-7.03l4.97,4.97-1.57,5.86-5.86,1.57-4.97-4.97v7.03l-5.26,3.04ZM18.5,41.91l4.26,2.46,4.26-2.46v-7.46l-4.26-2.46-4.26,2.46v7.46ZM7.48,38.04l4.75,1.27,5.27-5.27-1.27-4.75-4.75-1.27-5.27,5.27,1.27,4.75ZM28.02,34.04l5.27,5.27,4.75-1.27,1.27-4.75-5.27-5.27-4.75,1.27-1.27,4.75ZM22.76,30.84l4.26,2.46v-.26l.18.18,1.27-4.75,4.75-1.27-.18-.18h.26l-2.46-4.26,2.46-4.26h-.26l.18-.18-4.75-1.27-1.27-4.75-.18.18v-.26l-4.26,2.46-4.26-2.46v.26l-.18-.18-1.27,4.75-4.75,1.27.18.18h-.26l2.46,4.26-2.46,4.26h.26l-.18.18,4.75,1.27,1.27,4.75.18-.18v.26l4.26-2.46ZM34.45,27.02h7.46l2.46-4.26-2.46-4.26h-7.46l-2.46,4.26,2.46,4.26ZM3.61,27.02h7.46l2.46-4.26-2.46-4.26H3.61l-2.46,4.26,2.46,4.26ZM29.29,16.23l4.75,1.27,5.27-5.27-1.27-4.75-4.75-1.27-5.27,5.27,1.27,4.75ZM6.21,12.23l5.27,5.27,4.75-1.27,1.27-4.75-5.27-5.27-4.75,1.27-1.27,4.75ZM18.5,11.07l4.26,2.46,4.26-2.46V3.61l-4.26-2.46-4.26,2.46v7.46Z"/>
+    </svg>
+  </div>
+  <div class="core-label">// CORE.LOCK</div>
+</div>
+
+<!-- Nexus L-bracket corner frames (all 4 corners). -->
+<div class="nexus-corner nexus-corner-tl" aria-hidden="true">
+  <svg viewBox="0 0 84 84" xmlns="http://www.w3.org/2000/svg">
+    <path fill="none" stroke="currentColor" stroke-width="1.6" d="M 84 4 L 30 4 L 4 30 L 4 84" />
+    <path fill="none" stroke="currentColor" stroke-width="1.6" opacity="0.55" d="M 84 12 L 38 12 L 12 38 L 12 84" />
+    <rect x="1" y="1" width="6" height="6" fill="currentColor" opacity="0.85"/>
+  </svg>
+</div>
+<div class="nexus-corner nexus-corner-tr" aria-hidden="true">
+  <svg viewBox="0 0 84 84" xmlns="http://www.w3.org/2000/svg">
+    <path fill="none" stroke="currentColor" stroke-width="1.6" d="M 84 4 L 30 4 L 4 30 L 4 84" />
+    <path fill="none" stroke="currentColor" stroke-width="1.6" opacity="0.55" d="M 84 12 L 38 12 L 12 38 L 12 84" />
+    <rect x="1" y="1" width="6" height="6" fill="currentColor" opacity="0.85"/>
+  </svg>
+</div>
+<div class="nexus-corner nexus-corner-bl" aria-hidden="true">
+  <svg viewBox="0 0 84 84" xmlns="http://www.w3.org/2000/svg">
+    <path fill="none" stroke="currentColor" stroke-width="1.6" d="M 84 4 L 30 4 L 4 30 L 4 84" />
+    <path fill="none" stroke="currentColor" stroke-width="1.6" opacity="0.55" d="M 84 12 L 38 12 L 12 38 L 12 84" />
+    <rect x="1" y="1" width="6" height="6" fill="currentColor" opacity="0.85"/>
+  </svg>
+</div>
+<div class="nexus-corner nexus-corner-br" aria-hidden="true">
+  <svg viewBox="0 0 84 84" xmlns="http://www.w3.org/2000/svg">
+    <path fill="none" stroke="currentColor" stroke-width="1.6" d="M 84 4 L 30 4 L 4 30 L 4 84" />
+    <path fill="none" stroke="currentColor" stroke-width="1.6" opacity="0.55" d="M 84 12 L 38 12 L 12 38 L 12 84" />
+    <rect x="1" y="1" width="6" height="6" fill="currentColor" opacity="0.85"/>
+  </svg>
+</div>

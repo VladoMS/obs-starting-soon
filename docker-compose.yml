@@ -1,0 +1,9 @@
+services:
+  obs-overlay:
+    image: nginx:alpine
+    container_name: obs-starting-soon
+    restart: unless-stopped
+    ports:
+      - "8088:80"
+    volumes:
+      - ./:/usr/share/nginx/html:ro

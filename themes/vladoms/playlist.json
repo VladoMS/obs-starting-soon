@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Chain Attack (Remix)",
+    "artist": "KAIYO//SHARD",
+    "src": "themes/vladoms/songs/chain-attack.wav",
+    "volume": 0.7
+  },
+  {
+    "title": "Fight with Assailant (Remix)",
+    "artist": "KAIYO//SHARD",
+    "src": "themes/vladoms/songs/fight-with-assailant.wav",
+    "volume": 0.7
+  },
+  {
+    "title": "Wuthering Waves — Waking of a World",
+    "artist": "KAIYO//SHARD",
+    "src": "themes/vladoms/songs/wuthering-waves-waking-of-a-world.mp3",
+    "volume": 0.7
+  },
+  {
+    "title": "Heaven Has No Pier",
+    "artist": "KAIYO//SHARD",
+    "src": "themes/vladoms/songs/heaven-has-no-pier.mp3",
+    "volume": 0.7
+  },
+  {
+    "title": "Where Winds Meet",
+    "artist": "KAIYO//SHARD",
+    "src": "themes/vladoms/songs/where-winds-meet.mp3",
+    "volume": 0.7
+  },
+  {
+    "title": "Across the Stars",
+    "artist": "KAIYO//SHARD",
+    "src": "themes/vladoms/songs/across-the-stars.mp3",
+    "volume": 0.7
+  },
+  {
+    "title": "Skyline View",
+    "artist": "KAIYO//SHARD",
+    "src": "themes/vladoms/songs/skyline-view.mp3",
+    "volume": 0.7
+  },
+  {
+    "title": "Mortal Kombat",
+    "artist": "KAIYO//SHARD",
+    "src": "themes/vladoms/songs/mortal-kombat.mp3",
+    "volume": 0.7
+  }
+]

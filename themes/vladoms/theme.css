@@ -1,0 +1,208 @@
+/* ==========================================================================
+   themes/vladoms/theme.css — VLADO.OS "Eve" operator HUD
+   Loaded for ?theme=vladoms (default). Activated by html.hud-eve. Hides the
+   synthwave HUD elements (if their markup is present) and lays the operator
+   chrome on top of the core background/headline: top status bar, eyebrow/role,
+   bottom-right broadcast panel, bottom-left AUX music widget, and the centered
+   FFT spectrum equalizer. Behavior (status cluster, equalizers, OBS telemetry)
+   is wired by the shared engine JS in index.html.
+   ========================================================================== */
+
+html.hud-eve {
+  --red:#ff3b1f; --red-soft:#ff6347; --red-glow:rgba(255,59,31,0.6);
+  --red-line:rgba(255,59,31,0.45); --red-bg:rgba(255,59,31,0.12);
+  --amber:#ffb020; --cyan:#1ec8ff; --green:#4ade80;
+  --t-hi:#e8edf3; --t:#b6c0cb; --t-dim:#6b7585; --t-faint:#404a58;
+  --line:rgba(255,255,255,0.10); --line-dim:rgba(255,255,255,0.06); --line-strong:rgba(255,255,255,0.18);
+}
+html.hud-eve, html.hud-eve body { background:#05080b; }
+html.hud-eve [data-composition-id="main"] { background:#05080b; }
+
+/* Atmospherics: void + red/cyan vignette + 64px operator grid over the scene. */
+html.hud-eve .bg-tint {
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 0%, rgba(255,59,31,0.10), transparent 60%),
+    radial-gradient(ellipse 60% 45% at 0% 100%, rgba(30,200,255,0.06), transparent 60%),
+    radial-gradient(ellipse 120% 120% at 50% 50%, transparent 38%, rgba(0,0,0,0.66) 100%),
+    linear-gradient(180deg, rgba(5,8,11,0.30), rgba(5,8,11,0.52));
+}
+html.hud-eve .bg-tint::after {
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size:64px 64px;
+  -webkit-mask-image:radial-gradient(ellipse at center, #000 30%, transparent 82%);
+          mask-image:radial-gradient(ellipse at center, #000 30%, transparent 82%);
+  opacity:0.5;
+}
+/* Blooms → red + cyan, subtler. */
+html.hud-eve .bloom-cyan    { background:#1ec8ff; opacity:0.08; }
+html.hud-eve .bloom-magenta { background:#ff3b1f; opacity:0.10; }
+
+/* Headline → Saira Condensed, white with red/cyan operator ghosts (still audio-reactive). */
+html.hud-eve .headline, html.hud-eve .headline-slice {
+  font-family:"Saira Condensed", sans-serif; font-weight:700;
+  letter-spacing:0.04em; color:#e8edf3;
+}
+html.hud-eve .headline {
+  text-shadow:
+    var(--rgb-r-x) var(--rgb-r-y) 0 #ff3b1f,
+    var(--rgb-c-x) var(--rgb-c-y) 0 #1ec8ff;
+}
+html.hud-eve .headline-slice { text-shadow:-3px 0 0 #ff3b1f, 3px 0 0 #1ec8ff; }
+
+/* HUD → JetBrains Mono, operator palette (applies if synthwave markup is present). */
+html.hud-eve .hud { font-family:"JetBrains Mono", monospace; }
+html.hud-eve .hud-tl { color:#b6c0cb; text-shadow:none; letter-spacing:0.18em; }
+html.hud-eve .hud-tl .blink { background:#4ade80; box-shadow:0 0 10px #4ade80; } /* green ONLINE */
+html.hud-eve .hud-tr { color:#b6c0cb; text-shadow:none; }
+html.hud-eve .hud-tr .underline { background:var(--red-line); box-shadow:0 0 6px var(--red-glow); }
+html.hud-eve .hud-bl .pulse-row { color:#6b7585; }
+html.hud-eve .hud-bl .pulse-row .track { background:rgba(255,255,255,0.08); }
+html.hud-eve .hud-bl .pulse-row .fill {
+  background:linear-gradient(90deg, rgba(255,59,31,0), #ff3b1f); box-shadow:0 0 8px var(--red-glow);
+}
+html.hud-eve .hud-br .label { color:var(--red-soft); text-shadow:0 0 8px var(--red-glow); }
+
+/* Nexus FUI accents → operator red/line. */
+html.hud-eve .nexus-corner { color:var(--red-line); filter:drop-shadow(0 0 4px var(--red-glow)); }
+html.hud-eve .nexus-hex-ring svg { color:rgba(255,59,31,0.40); filter:drop-shadow(0 0 6px var(--red-glow)); }
+html.hud-eve .nexus-tx {
+  color:#b6c0cb; border-color:var(--red-line);
+  background:linear-gradient(180deg, rgba(255,59,31,0.10), rgba(8,12,17,0.30));
+  box-shadow:0 0 22px rgba(255,59,31,0.12) inset;
+}
+html.hud-eve .nexus-tx .dot  { background:var(--green); box-shadow:0 0 8px var(--green); }
+html.hud-eve .nexus-tx .id-num { color:var(--amber); }
+html.hud-eve .nexus-tx .live { color:var(--red-soft); text-shadow:0 0 8px var(--red-glow); }
+html.hud-eve .nexus-core .ring {
+  background:conic-gradient(from -90deg, #ff3b1f calc(var(--bass) * 360deg), rgba(255,59,31,0.12) 0);
+  filter:drop-shadow(0 0 8px var(--red-glow));
+}
+html.hud-eve .nexus-core .glyph { color:rgba(255,99,71,0.85); }
+html.hud-eve .nexus-core .glyph svg { filter:drop-shadow(0 0 4px var(--red-glow)); }
+html.hud-eve .nexus-core .core-label { color:#6b7585; }
+
+/* Scanlines — a touch crisper for the CRT-operator read. */
+html.hud-eve .scanlines {
+  background:repeating-linear-gradient(to bottom,
+    rgba(255,255,255,0) 0px, rgba(255,255,255,0) 2px,
+    rgba(255,255,255,0.05) 3px, rgba(255,255,255,0) 4px);
+}
+
+/* The synthwave HUD (corners, nexus FUI, icosahedron, perspective grid) is HIDDEN
+   here — the Eve operator HUD replaces it wholesale. We keep the bg/tint/blooms/
+   scanline skin and the audio-reactive headline; everything else is new. */
+html.hud-eve .hud,
+html.hud-eve .hud-br,
+html.hud-eve .nexus-tx,
+html.hud-eve .nexus-hex-ring,
+html.hud-eve .nexus-core,
+html.hud-eve .nexus-corner,
+html.hud-eve .grid-floor { display:none !important; }
+
+/* Center the headline in the full frame (no left rail — broadcast overlay, not a website). */
+html.hud-eve .center-col { top:0; bottom:0; left:0; right:0; height:auto; }
+html.hud-eve .headline, html.hud-eve .headline-slice { font-size:108px; letter-spacing:0.02em; }
+
+/* ============ EVE OPERATOR HUD ============ */
+#eve-hud { display:none; }
+html.hud-eve #eve-hud {
+  display:block; position:absolute; inset:0; z-index:45; pointer-events:none;
+  font-family:"JetBrains Mono", monospace; color:var(--t);
+}
+html.hud-eve #eve-hud b { font-weight:500; }
+
+/* --- top bar: brand + crumbs + live status cluster --- */
+.eve-top {
+  position:absolute; top:0; left:0; right:0; height:44px;
+  display:flex; align-items:center; padding:0 20px;
+  background:linear-gradient(180deg, rgba(8,12,17,0.96), rgba(8,12,17,0.82));
+  border-bottom:1px solid var(--red-line);
+  font-size:11px; letter-spacing:0.08em; color:var(--t-dim);
+}
+.eve-brand { display:flex; align-items:center; gap:10px; }
+.eve-glyph { display:block; }
+.eve-brand-name { font-family:"Saira Condensed", sans-serif; font-weight:600; letter-spacing:0.22em; font-size:14px; color:var(--t-hi); }
+.eve-brand-sub { color:var(--red); letter-spacing:0.22em; font-size:11px; }
+.eve-div { width:1px; height:18px; background:var(--line); margin:0 16px; }
+.eve-crumbs { display:flex; gap:18px; align-items:center; }
+.eve-crumb { display:flex; gap:8px; align-items:center; }
+.eve-crumb i, .eve-stat i { color:var(--t-faint); font-style:normal; }
+.eve-crumb b, .eve-stat b { color:var(--t); }
+.eve-spacer { flex:1; }
+.eve-status { display:flex; gap:16px; align-items:center; }
+.eve-stat { display:flex; gap:8px; align-items:center; }
+.eve-dot { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green); animation:evePulse 2.4s ease-in-out infinite; }
+.eve-clock b { color:var(--red-soft); }
+@keyframes evePulse { 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+
+/* --- hero eyebrow + role around the headline --- */
+.eve-eyebrow {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-150px);
+  display:inline-flex; align-items:center; gap:10px; white-space:nowrap;
+  font-size:13px; letter-spacing:0.24em; text-transform:uppercase; color:var(--t-dim);
+}
+.eve-eyebrow-dash { width:22px; height:1px; background:var(--red); box-shadow:0 0 6px var(--red); }
+.eve-role {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,96px);
+  white-space:nowrap; font-size:15px; letter-spacing:0.34em; text-transform:uppercase; color:var(--red-soft);
+}
+
+/* --- bottom-right framed broadcast status panel --- */
+.eve-panel {
+  position:absolute; right:26px; bottom:26px; width:236px;
+  background:rgba(12,18,26,0.82); border:1px solid var(--line);
+}
+.eve-panel::before, .eve-panel::after { content:""; position:absolute; width:14px; height:14px; top:-1px; border-top:1px solid var(--red); }
+.eve-panel::before { left:-1px; border-left:1px solid var(--red); }
+.eve-panel::after { right:-1px; border-right:1px solid var(--red); }
+.eve-corner { position:absolute; bottom:-1px; width:12px; height:12px; }
+.eve-corner.bl { left:-1px; border-left:1px solid var(--red); border-bottom:1px solid var(--red); }
+.eve-corner.br { right:-1px; border-right:1px solid var(--red); border-bottom:1px solid var(--red); }
+.eve-panel-head { display:flex; align-items:center; justify-content:space-between; padding:9px 12px; border-bottom:1px solid var(--line); background:linear-gradient(180deg, rgba(255,59,31,0.10), rgba(12,18,26,0.6)); }
+.eve-eyebrow.sm { position:static; transform:none; font-size:10px; letter-spacing:0.18em; color:var(--t-dim); }
+.eve-eyebrow.sm .eve-eyebrow-dash { width:14px; }
+.eve-hex { width:30px; height:30px; display:grid; place-items:center; background:var(--red-bg); border:1px solid var(--red-line); color:var(--red); font-size:11px; clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%); }
+.eve-readout { padding:4px 0; }
+.eve-readout .r { display:flex; justify-content:space-between; padding:7px 12px; font-size:11px; }
+.eve-readout .k { color:var(--t-faint); }
+.eve-readout .v { color:var(--t); }
+.eve-readout .v.live { color:var(--red-soft); }
+
+/* --- music player widget (bottom-left) --- */
+.eve-mp {
+  position:absolute; left:26px; bottom:26px;
+  display:flex; align-items:center; gap:12px; padding:8px 14px;
+  background:rgba(10,15,21,0.9); border:1px solid var(--line);
+  clip-path:polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  font-size:10.5px;
+}
+.eve-mp-aux { display:flex; align-items:center; gap:8px; }
+.eve-mp-auxlabel { font-size:10px; letter-spacing:0.2em; color:var(--red-soft); }
+.eve-mp-eq { display:inline-flex; align-items:flex-end; gap:2px; height:14px; }
+.eve-mp-eq i { width:3px; height:14px; background:var(--red); transform-origin:bottom; transform:scaleY(0.3); will-change:transform; }
+.eve-mp-transport { display:flex; gap:10px; align-items:center; color:var(--t-dim); }
+.eve-mp-transport .b { display:block; }
+.eve-mp-transport .play { color:var(--red); }
+.eve-mp-ticker { width:210px; overflow:hidden; }
+.eve-mp-track { display:flex; gap:40px; white-space:nowrap; color:var(--t); animation:eveTicker 14s linear infinite; }
+@keyframes eveTicker { from{transform:translateX(0);} to{transform:translateX(-50%);} }
+.eve-mp-counter { color:var(--t-faint); }
+
+/* --- spectrum equalizer (audio-reactive), centered below the headline ---
+   Bars built + driven from the FFT in the engine JS; animates transform:scaleY()
+   only (GPU). */
+.eq-v2 { display:none; }
+html.hud-eve .eq-v2 {
+  display:flex; align-items:flex-end; justify-content:center; gap:4px;
+  position:absolute; top:50%; left:50%; transform:translate(-50%,158px);
+  width:880px; height:84px; z-index:18; pointer-events:none;
+  border-bottom:1px solid var(--red-line);
+}
+html.hud-eve .eq-bar {
+  flex:1; height:100%; transform-origin:bottom; transform:scaleY(0.04);
+  background:linear-gradient(180deg, var(--red-soft), rgba(255,59,31,0.12));
+  box-shadow:0 0 6px var(--red-glow); will-change:transform;
+}

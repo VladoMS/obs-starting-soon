@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <!--
+      ============================================================
+        OBS STINGER — KAIYO//SHARD HUD GLITCH WIPE (1.6s)
+      ============================================================
+      Single-scene composition rendered to alpha WebM.
+      OBS scene swap fires at the calm-cover hold (frame 48 / 0.80s).
+
+      Photosensitivity-safe: no full-screen white flash, no rapid
+      luminance swings. Smooth eases, gentle chromatic split.
+
+      Render: npx hyperframes render --format webm --fps 60 --quality high
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Rajdhani", "Inter", "Arial", sans-serif;
+        color: #f6fbff;
+      }
+
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+
+      /* ======== Diagonal cover slabs ========
+         Hero state = on-screen at (0,0). Together they tile the canvas
+         with a calm dark coverage during the cut window. */
+      .slab {
+        position: absolute;
+        width: 2200px;
+        height: 1280px;
+        background: linear-gradient(135deg, #04060e 0%, #0a1428 100%);
+        will-change: transform;
+        z-index: 2;
+      }
+      .slab-top {
+        left: -150px;
+        top: -120px;
+        clip-path: polygon(0 0, 100% 0, 100% 60%, 0 90%);
+      }
+      .slab-bot {
+        left: -130px;
+        top: 100px;
+        clip-path: polygon(0 35%, 100% 5%, 100% 100%, 0 100%);
+        background: linear-gradient(135deg, #08101e 0%, #04060e 100%);
+      }
+
+      /* ======== Neon blooms (gentle ambient glow, capped at 0.4 opacity) ======== */
+      .bloom {
+        position: absolute;
+        width: 920px; height: 920px;
+        border-radius: 50%;
+        filter: blur(150px);
+        opacity: 0.4;
+        will-change: opacity;
+        pointer-events: none;
+        z-index: 3;
+      }
+      .bloom-cyan    { background: #00f0ff; left: -260px;  top: 80px; }
+      .bloom-magenta { background: #ff2bd6; right: -260px; bottom: 60px; }
+
+      /* ======== Scanlines + grain (calm levels, no strobing) ======== */
+      .scanlines {
+        position: absolute; inset: 0;
+        background: repeating-linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0) 0px,
+          rgba(255, 255, 255, 0) 2px,
+          rgba(200, 230, 255, 0.14) 3px,
+          rgba(255, 255, 255, 0) 4px
+        );
+        pointer-events: none;
+        opacity: 0.5;
+        will-change: opacity;
+        z-index: 5;
+      }
+      .grain {
+        position: absolute; inset: 0;
+        pointer-events: none;
+        opacity: 0.16;
+        will-change: opacity;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.7  0 0 0 0 0.85  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+        background-repeat: repeat;
+        z-index: 6;
+      }
+
+      /* ======== HUD corner brackets ======== */
+      .bracket {
+        position: absolute;
+        width: 72px; height: 72px;
+        border: 2px solid #f5c542;
+        box-shadow: 0 0 14px rgba(245, 197, 66, 0.5);
+        will-change: opacity, transform;
+        z-index: 8;
+      }
+      .br-tl { top: 60px;    left: 80px;    border-right: none; border-bottom: none; }
+      .br-tr { top: 60px;    right: 80px;   border-left:  none; border-bottom: none; }
+      .br-bl { bottom: 60px; left: 80px;    border-right: none; border-top:    none; }
+      .br-br { bottom: 60px; right: 80px;   border-left:  none; border-top:    none; }
+
+      /* ======== HUD status text ======== */
+      .hud-text {
+        position: absolute;
+        font-family: "Rajdhani", sans-serif;
+        font-weight: 600;
+        font-size: 24px;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: #f5c542;
+        text-shadow: 0 0 10px rgba(245, 197, 66, 0.5);
+        will-change: opacity, transform;
+        z-index: 9;
+      }
+      .hud-tl { top: 78px; left: 180px; }
+      .hud-br { bottom: 78px; right: 180px; }
+
+      /* ======== Center headline ========
+         Hero state = visible with mild chromatic split.
+         GSAP gently nudges the split — no hard spike. */
+      .headline-wrap {
+        position: absolute; inset: 0;
+        display: flex; align-items: center; justify-content: center;
+        pointer-events: none;
+        z-index: 10;
+      }
+      .headline {
+        font-family: "Orbitron", sans-serif;
+        font-weight: 900;
+        font-size: 144px;
+        line-height: 1;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #f6fbff;
+        white-space: nowrap;
+        --rgb-x: 6px;
+        text-shadow:
+          calc(var(--rgb-x) * -1) 0 0 #ff2b6a,
+          var(--rgb-x) 0 0 #00f6ff;
+        will-change: opacity, transform, text-shadow;
+      }
+
+      /* ======== Sweeping cyan scan strip (slow, single sweep) ======== */
+      .scan-strip {
+        position: absolute;
+        left: 0; right: 0;
+        height: 4px;
+        top: 0;
+        background: linear-gradient(180deg, transparent 0%, #00f6ff 50%, transparent 100%);
+        box-shadow: 0 0 14px #00f6ff, 0 0 40px rgba(0, 246, 255, 0.6);
+        opacity: 0;
+        pointer-events: none;
+        will-change: opacity, transform;
+        z-index: 11;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="1.6"
+      data-track-index="0"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div class="slab slab-top" id="slab-top"></div>
+      <div class="slab slab-bot" id="slab-bot"></div>
+
+      <div class="bloom bloom-cyan"    id="bloom-c"></div>
+      <div class="bloom bloom-magenta" id="bloom-m"></div>
+
+      <div class="scanlines" id="scanlines"></div>
+      <div class="grain"     id="grain"></div>
+
+      <div class="bracket br-tl" id="br-tl"></div>
+      <div class="bracket br-tr" id="br-tr"></div>
+      <div class="bracket br-bl" id="br-bl"></div>
+      <div class="bracket br-br" id="br-br"></div>
+
+      <div class="hud-text hud-tl" id="hud-tl-text">// SIGNAL LOST</div>
+      <div class="hud-text hud-br" id="hud-br-text">SYNC // 0FF.80</div>
+
+      <div class="scan-strip" id="scan-strip"></div>
+
+      <div class="headline-wrap">
+        <div class="headline" id="headline">TRANSMISSION</div>
+      </div>
+    </div>
+
+    <audio
+      id="stinger-audio"
+      data-start="0"
+      data-duration="1.6"
+      data-track-index="1"
+      src="stinger-audio.wav"
+      data-volume="0.85"
+    ></audio>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      /* ============================================================
+         Phase 1 — wipe IN (0.00 → 0.72s)
+         Slabs glide diagonally to cover the canvas with a smooth
+         in/out ease. No hard impact, no shake, no flash.
+         ============================================================ */
+      tl.from("#slab-top", { x: -2400, y: -1600, duration: 0.66, ease: "power2.inOut" }, 0);
+      tl.from("#slab-bot", { x:  2400, y:  1600, duration: 0.66, ease: "power2.inOut" }, 0);
+
+      /* HUD dressing eases in as cover completes — slow ramps, no pops */
+      tl.from(["#bloom-c", "#bloom-m"], { opacity: 0, duration: 0.42, ease: "sine.out" }, 0.32);
+      tl.from("#scanlines", { opacity: 0, duration: 0.42, ease: "sine.out" }, 0.40);
+      tl.from("#grain",     { opacity: 0, duration: 0.42, ease: "sine.out" }, 0.40);
+
+      /* Corner brackets fade + tiny scale, gentler back ease */
+      tl.from(["#br-tl", "#br-tr", "#br-bl", "#br-br"],
+        { opacity: 0, scale: 0.7, duration: 0.26, stagger: 0.05, ease: "back.out(1.4)" }, 0.48);
+
+      /* Status text */
+      tl.from("#hud-tl-text", { opacity: 0, x: 12, duration: 0.30, ease: "expo.out" }, 0.56);
+      tl.from("#hud-br-text", { opacity: 0, x: -12, duration: 0.30, ease: "expo.out" }, 0.60);
+
+      /* Headline — fade up + scale + small chromatic build */
+      tl.from("#headline", { opacity: 0, scale: 0.94, duration: 0.36, ease: "expo.out" }, 0.52);
+      tl.to("#headline", { "--rgb-x": "12px", duration: 0.26, ease: "sine.inOut" }, 0.60);
+
+      /* Cyan scan strip — single slow sweep top → bottom */
+      tl.fromTo("#scan-strip",
+        { opacity: 0, y: -40 },
+        { opacity: 0.85, y: 1120, duration: 0.72, ease: "sine.inOut" }, 0.40);
+
+      /* ============================================================
+         Phase 2 — calm hold / OBS cut (0.72 → 1.00s)
+         Screen is fully covered with stable HUD dressing. Gentle
+         bloom breath. NO flash, NO chromatic spike. OBS swaps at 0.80s.
+         ============================================================ */
+      tl.to(["#bloom-c", "#bloom-m"],
+        { opacity: 0.55, duration: 0.14, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0.74);
+
+      /* ============================================================
+         Phase 3 — wipe OUT (1.00 → 1.60s)
+         Slabs retract, HUD clears, alpha → 0. All eases are gentle.
+         ============================================================ */
+      tl.to("#headline", { opacity: 0, duration: 0.28, ease: "power2.in" }, 1.04);
+      tl.to("#hud-tl-text", { opacity: 0, x: -10, duration: 0.24, ease: "power2.in" }, 1.04);
+      tl.to("#hud-br-text", { opacity: 0, x:  10, duration: 0.24, ease: "power2.in" }, 1.06);
+      tl.to(["#br-tl", "#br-tr", "#br-bl", "#br-br"],
+        { opacity: 0, scale: 0.75, duration: 0.26, stagger: 0.04, ease: "power2.in" }, 1.10);
+      tl.to(["#bloom-c", "#bloom-m"], { opacity: 0, duration: 0.40, ease: "sine.in" }, 1.13);
+      tl.to("#scanlines", { opacity: 0, duration: 0.36, ease: "sine.in" }, 1.18);
+      tl.to("#grain",     { opacity: 0, duration: 0.36, ease: "sine.in" }, 1.18);
+
+      /* Slabs retract diagonally, mirrored entry ease */
+      tl.to("#slab-top", { x: -2400, y: -1600, duration: 0.60, ease: "power2.inOut" }, 1.00);
+      tl.to("#slab-bot", { x:  2400, y:  1600, duration: 0.60, ease: "power2.inOut" }, 1.00);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

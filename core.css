@@ -1,0 +1,206 @@
+/* ==========================================================================
+   core.css — shared base layer for ALL themes
+   Loaded unconditionally by index.html. Holds the structural overlay (sizing,
+   background A/B stack + video, tint, blooms, scanlines, grain, headline +
+   slice mechanics, blackout). Theme-specific chrome lives in themes/<id>/theme.css.
+   The default (un-themed) headline look here is the KAIYO//SHARD synthwave style
+   (Orbitron + magenta/cyan ghosts); the Eve themes override it in their theme.css.
+   ========================================================================== */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  margin: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: #000;
+  font-family: "Rajdhani", "Inter", "Arial", sans-serif;
+  color: #e6f6ff;
+}
+
+[data-composition-id="main"] {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: #04060e;
+}
+
+/* ======== Background stack (A/B crossfade layers) ======== */
+#bg-stack { position: absolute; inset: 0; z-index: 1; }
+.bg-layer {
+  position: absolute; inset: 0;
+  background-color: #04060e;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0;
+  will-change: opacity;
+}
+/* Color grading happens via the .bg-tint overlay below — keeping it off the
+   (potentially scaled) image layer avoids a full-screen filter pass per frame. */
+
+/* Background video — used by the video-muted (audio from a separate track) and
+   video-audio (song plays from the file) background modes. Sits at the same
+   z-index as the bg-layers but later in the DOM, so its opaque frames paint over
+   the (unused) A/B layers. Fades in via its own opacity transition; the blackout
+   overlay covers the entrance otherwise. */
+.bg-video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+  transition: opacity 1.5s ease;
+  display: none;        /* only shown by video background modes */
+}
+
+/* Tint overlay — deep navy, soft vignette + brightness/contrast knockdown
+   so the bg image reads as moody backdrop without filtering the image layer itself. */
+.bg-tint {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(0, 8, 24, 0.0) 0%, rgba(2, 4, 12, 0.10) 55%, rgba(0, 0, 0, 0.45) 100%),
+    linear-gradient(180deg, rgba(8, 16, 40, 0.10) 0%, rgba(4, 6, 18, 0.18) 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Slow drifting neon blooms */
+.bloom-cyan, .bloom-magenta {
+  position: absolute;
+  width: 720px; height: 720px;
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: 0.12;
+  z-index: 3;
+  pointer-events: none;
+}
+.bloom-cyan { background: #00f0ff; left: -200px; top: 200px; }
+.bloom-magenta { background: #ff2bd6; right: -200px; bottom: 100px; }
+
+/* Perspective grid floor (canvas positioning; drawn by the synthwave theme) */
+.grid-floor {
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 1920px; height: 540px;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* Scanlines — no mix-blend-mode (forces re-composite of full stack on every
+   underlying transform). Plain rgba lines on top read close enough. */
+.scanlines {
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.0) 0px,
+    rgba(255,255,255,0.0) 2px,
+    rgba(200, 230, 255, 0.07) 3px,
+    rgba(255,255,255,0.0) 4px
+  );
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* Faint grain — also no mix-blend-mode for the same compositor reason. */
+.grain {
+  position: absolute; inset: 0;
+  z-index: 31;
+  pointer-events: none;
+  opacity: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.7  0 0 0 0 0.85  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+  background-repeat: repeat;
+}
+
+/* ======== Center column ========
+   Default (synthwave) placement sits the headline in the bottom strip between
+   the bottom-left pulse rows and the bottom-right icosahedron. Eve themes
+   re-center it to the full frame in their theme.css. */
+.center-col {
+  position: absolute;
+  left: 290px;
+  right: 230px;
+  bottom: 36px;
+  height: 122px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* Headline — audio-reactive GLITCH effect on bass kicks.
+   JS detects bass punches and writes:
+     --glitch-x  → horizontal jitter (px)
+     --glitch-sk → skewX (deg)
+     --rgb-*     → chromatic-aberration split on the cyan/magenta ghost layers (px)
+   A modest static text-shadow keeps the text legible between hits. */
+.headline-wrap { position: relative; text-align: center; }
+.headline {
+  font-family: "Orbitron", sans-serif;
+  font-weight: 800;
+  font-size: 96px;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  color: #f6fbff;
+  text-transform: uppercase;
+  white-space: nowrap;
+  --glitch-x: 0px;
+  --glitch-sk: 0deg;
+  --rgb-r-x: 0px;     /* red/magenta ghost X offset, set per beat */
+  --rgb-r-y: 0px;
+  --rgb-c-x: 0px;     /* cyan ghost X offset, opposite sign */
+  --rgb-c-y: 0px;
+  --slice-top: 100%;  /* idle: clip-path collapsed (no slice visible) */
+  --slice-bottom: 0%;
+  text-shadow:
+    var(--rgb-r-x) var(--rgb-r-y) 0 #ff2b6a,
+    var(--rgb-c-x) var(--rgb-c-y) 0 #00f6ff;
+  transform: translate(var(--glitch-x), 0) skewX(var(--glitch-sk));
+  will-change: transform, text-shadow;
+}
+/* Slice band: a duplicate of the headline that re-renders only a horizontal
+   slice with an opposite RGB split + extra X offset. Updated per beat for
+   the classic VHS slice-displacement glitch. */
+.headline-slice {
+  position: absolute; inset: 0;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 800;
+  font-size: 96px;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  color: #f6fbff;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-align: center;
+  pointer-events: none;
+  --slice-y: 100%;
+  --slice-h: 0%;
+  --slice-x: 0px;
+  clip-path: inset(var(--slice-y) 0 calc(100% - var(--slice-y) - var(--slice-h)) 0);
+  transform: translate(var(--slice-x), 0);
+  text-shadow:
+    -3px 0 0 #ff2b6a,
+    3px 0 0 #00f6ff;
+  will-change: clip-path, transform;
+}
+.headline .ch {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(28px);
+  will-change: transform, opacity;
+}
+.headline .gap-space { width: 0.45em; display: inline-block; }
+
+/* Initial blackout — fades out on intro (shared by all themes) */
+.blackout {
+  position: absolute; inset: 0;
+  background: #000;
+  z-index: 99;
+  opacity: 1;
+  pointer-events: none;
+}
