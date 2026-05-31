@@ -48,14 +48,10 @@ let _introDone = false;
 function finalizeIntro() {
   if (_introDone) return;
   _introDone = true;
+  for (let i = 0; i < OVERLAY._intro.length; i++) OVERLAY._intro[i](introTl, NO_INTRO);
   if (NO_INTRO) {
-    gsap.set("#blackout", { opacity: 0 });
-    gsap.set("#bg-A", { opacity: 1 });
-    if (!NO_FX) { gsap.set("#scanlines", { opacity: 0.6 }); gsap.set("#grain", { opacity: 0.08 }); }
-    gsap.set("#headline .ch", { y: 0, opacity: 1 });
-    for (let i = 0; i < OVERLAY._intro.length; i++) OVERLAY._intro[i](null, true);
+    introTl.progress(1);
   } else {
-    for (let i = 0; i < OVERLAY._intro.length; i++) OVERLAY._intro[i](introTl, false);
     introTl.play();
   }
 }
@@ -65,14 +61,9 @@ let bassEnv = 0, midEnv = 0, trebleEnv = 0;
 let holdBass = 0, holdMid = 0, holdTreble = 0;
 const REACT_BASS = 0.85, REACT_MID = 1.25, REACT_TREBLE = 1.85;
 const t0 = performance.now() / 1000;
-function tick(rafNow) {
-  const now = performance.now() / 1000;
-  const elapsed = now - t0;
-  const nowMs = rafNow || performance.now();
 
+function computeEnvelopes(live, elapsed) {
   let bass = 0, mid = 0, treble = 0;
-  const live = analyser && analyserMedia && !analyserMedia.paused && analyserMedia.currentTime > 0;
-
   if (live) {
     analyser.getByteFrequencyData(freqData);
     let bs = 0, md = 0, tr = 0;
@@ -87,7 +78,6 @@ function tick(rafNow) {
     mid    = 0.18 + 0.08 * Math.sin(elapsed * 1.4 + 0.5);
     treble = 0.20 + 0.06 * Math.sin(elapsed * 2.0 + 1.1);
   }
-
   bassEnv   = bassEnv   * 0.70 + bass   * 0.30;
   midEnv    = midEnv    * 0.70 + mid    * 0.30;
   trebleEnv = trebleEnv * 0.70 + treble * 0.30;
@@ -97,7 +87,10 @@ function tick(rafNow) {
   holdBass   = Math.max(holdBass   * 0.42, Math.min(1, pBass   * 14));
   holdMid    = Math.max(holdMid    * 0.50, Math.min(1, pMid    * 13));
   holdTreble = Math.max(holdTreble * 0.32, Math.min(1, pTreble * 16));
+  return { bass, mid, treble, bassEnv, midEnv, trebleEnv, holdBass, holdMid, holdTreble, live };
+}
 
+function applyHeadlineGlitch(holdBass) {
   if (holdBass > 0.02) {
     HEADLINE_EL.style.setProperty("--glitch-x", ((Math.random() - 0.5) * holdBass * 32).toFixed(1) + "px");
     HEADLINE_EL.style.setProperty("--glitch-sk", ((Math.random() - 0.5) * holdBass * 3.5).toFixed(2) + "deg");
@@ -105,6 +98,9 @@ function tick(rafNow) {
     HEADLINE_EL.style.setProperty("--glitch-x", "0px");
     HEADLINE_EL.style.setProperty("--glitch-sk", "0deg");
   }
+}
+
+function applyRgbSplit(mid, holdMid) {
   const rgbAmt = Math.max(mid * 0.55, holdMid * 1.1);
   if (rgbAmt > 0.02) {
     const sign = (Math.random() < 0.5 ? -1 : 1);
@@ -120,6 +116,9 @@ function tick(rafNow) {
     HEADLINE_EL.style.setProperty("--rgb-c-x", "0px");
     HEADLINE_EL.style.setProperty("--rgb-c-y", "0px");
   }
+}
+
+function applySlice(treble, holdTreble) {
   const sliceAmt = Math.max(treble * 0.55, holdTreble * 1.1);
   if (sliceAmt > 0.04) {
     const sy = (Math.random() * 0.72 + 0.04) * 100;
@@ -130,10 +129,20 @@ function tick(rafNow) {
   } else {
     SLICE_EL.style.setProperty("--slice-h", "0%");
   }
+}
 
-  const td = { nowMs, elapsed, bass, mid, treble, bassEnv, midEnv, trebleEnv, holdBass, holdMid, holdTreble, live };
-  for (let i = 0; i < OVERLAY._tick.length; i++) OVERLAY._tick[i](td);
+function tick(rafNow) {
+  const nowSec = performance.now() / 1000;
+  const elapsed = nowSec - t0;
+  const nowMs = rafNow || performance.now();
+  const live = analyser && analyserMedia && !analyserMedia.paused && analyserMedia.currentTime > 0;
 
+  const env = { ...computeEnvelopes(live, elapsed), nowMs, elapsed };
+  applyHeadlineGlitch(env.holdBass);
+  applyRgbSplit(env.mid, env.holdMid);
+  applySlice(env.treble, env.holdTreble);
+
+  for (let i = 0; i < OVERLAY._tick.length; i++) OVERLAY._tick[i](env);
   requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);

@@ -9,10 +9,10 @@ obs-starting-soon/
 ├── index.html              overlay shell (HTML + inline bootstrap)
 ├── core.css                shared structural CSS (background stack, headline, blooms)
 ├── js/                     extracted engine modules
-│   ├── config.js           query params, THEMES config, OVERLAY bridge
+│   ├── config.js           query params, THEMES config, OVERLAY bridge, tryPlayElement, fileExists
 │   ├── audio.js            playlist + Web Audio API analyser
-│   ├── backgrounds.js      A/B crossfade background rotation
-│   └── engine.js           headline builder, intro, tick loop, init
+│   ├── backgrounds.js      A/B crossfade background rotation, setupVideoBackground helper
+│   └── engine.js           headline builder, intro, tick loop, computeEnvelopes/glitch/slice effects
 ├── htmx.min.js             loads theme HUD fragments dynamically
 ├── gsap.min.js             one-shot intro animation
 ├── docker-compose.yml      nginx:alpine — serve over HTTP (required for audio context)
@@ -76,7 +76,7 @@ New themes are registered in:
 | `?bg=N` | `10` | Seconds between background rotations |
 | `?theme=ID` | `vladoms` | Theme preset (`vladoms`, `kaiyo`, `wwm`) |
 | `?nofx=1` | off | Hide scanlines + grain (cleaner, lighter) |
-| `?nointro=1` | off | Skip entrance animation |
+| `?nointro=0` | on | Play entrance animation (default: skipped) |
 | `?volume=0.5` | per-track | Override audio volume (0..1) |
 | `?obs=0` | on | Disable OBS WebSocket (vladoms theme) |
 | `?obsport=N` | `4455` | OBS WebSocket port |
@@ -86,7 +86,7 @@ New themes are registered in:
 
 - **Single HTML file** by design. OBS loads one URL.
 - **Core + theme separation**: `core.css` is shared structural styles; theme CSS scopes its overrides under an `<html>` class.
-- **GSAP intro only** — one-shot entrance animation. No infinite GSAP tweens on composited layers (kills OBS performance).
+- **GSAP intro only** — one-shot entrance animation. No infinite GSAP tweens on composited layers (kills OBS performance). `?nointro=1` snaps via `introTl.progress(1)`.
 - **Audio reactivity** via Web Audio API: `<audio>` → `MediaElementSource` → `AnalyserNode`. Per-frame `tick()` dispatches FFT data to theme hooks.
 - **CSS transforms for animation**: Bars use `transform: scaleY()`, not `style.height` — GPU-only, no layout triggers.
 - **Background crossfade**: Two `<div class="bg-layer">` elements swap opacities (1.2s tween) on rotation.
@@ -100,7 +100,8 @@ New themes are registered in:
 2. htmx fetches `themes/<id>/hud.html` into `#theme-hud`
 3. Theme JS loads after swap, registers with `OVERLAY.onTick()` / `OVERLAY.onIntro()`
 4. Core engine loads backgrounds + playlist, starts audio, begins `requestAnimationFrame` loop
-5. Each frame: FFT analysis → envelope detection → headline glitch effects → theme tick hooks
+5. Each frame: `tick()` → `computeEnvelopes()` (FFT → bass/mid/treble envelopes) → `applyHeadlineGlitch()` / `applyRgbSplit()` / `applySlice()` → theme tick hooks
+6. Intro runs as a GSAP timeline; `?nointro=0` calls `introTl.progress(1)` to snap all tweens instantly
 
 ## Performance
 

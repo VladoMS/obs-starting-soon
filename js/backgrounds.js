@@ -55,33 +55,25 @@ function rotateBackground() {
   const tmp = bgFront; bgFront = bgBack; bgBack = tmp;
 }
 
+async function setupVideoBackground(opts) {
+  if (!await fileExists(opts.src)) return null;
+  const v = document.getElementById("bg-video");
+  v.style.display = "block";
+  if (opts.muted != null) v.muted = opts.muted;
+  if (opts.loop) v.loop = true;
+  if (opts.volume != null) v.volume = opts.volume;
+  v.src = opts.src;
+  const reveal = () => { v.style.opacity = "1"; };
+  v.addEventListener("canplay", reveal, { once: true });
+  tryPlayElement(v, reveal, opts.onRetry);
+  return v;
+}
+
 async function loadBackgrounds() {
   if (THEME.bg.mode === "video-muted") {
-    if (await fileExists(THEME.bg.video)) {
-      const v = document.getElementById("bg-video");
-      v.style.display = "block";
-      v.muted = true;
-      v.src = THEME.bg.video;
-      const reveal = () => { v.style.opacity = "1"; };
-      const tryPlay = () => {
-        const p = v.play();
-        if (p && p.catch) {
-          p.catch(() => {
-            const resume = () => { v.play().then(reveal).catch(()=>{}); document.removeEventListener("click", resume); };
-            document.addEventListener("click", resume, { once: true });
-          });
-        }
-      };
-      v.addEventListener("canplay", reveal, { once: true });
-      tryPlay();
-      return;
-    }
+    if (await setupVideoBackground({ src: THEME.bg.video, muted: true })) return;
     if (THEME.bg.plate && await fileExists(THEME.bg.plate)) {
-      bgList = [{
-        id: THEME_ID, game: "", caption: "",
-        src: THEME.bg.plate,
-        tint: ["rgba(0,0,0,0)", "rgba(0,0,0,0)"]
-      }];
+      bgList = [{ id: THEME_ID, game: "", caption: "", src: THEME.bg.plate, tint: ["rgba(0,0,0,0)", "rgba(0,0,0,0)"] }];
       bgIndex = 0;
       applyBgVisuals(bgFront, bgList[0]);
       bgFront.style.opacity = NO_INTRO ? 1 : 0;
@@ -89,31 +81,15 @@ async function loadBackgrounds() {
     }
   }
   if (THEME.bg.mode === "video-audio") {
-    if (await fileExists(THEME.bg.video)) {
-      const v = document.getElementById("bg-video");
-      v.style.display = "block";
-      v.loop = true;
-      v.muted = false;
-      v.volume = VOLUME_OVERRIDE != null ? VOLUME_OVERRIDE : 1;
-      v.src = THEME.bg.video;
-      setupAudioAnalyser(v);
-      const reveal = () => { v.style.opacity = "1"; };
-      const tryPlay = () => {
-        if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-        const p = v.play();
-        if (p && p.catch) {
-          p.catch(() => {
-            const resume = () => {
-              if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-              v.play().then(reveal).catch(()=>{});
-              document.removeEventListener("click", resume);
-            };
-            document.addEventListener("click", resume, { once: true });
-          });
-        }
-      };
-      v.addEventListener("canplay", reveal, { once: true });
-      tryPlay();
+    if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+    const resumeAudio = () => { if (audioCtx && audioCtx.state === "suspended") audioCtx.resume(); };
+    const video = await setupVideoBackground({
+      src: THEME.bg.video, muted: false, loop: true,
+      volume: VOLUME_OVERRIDE != null ? VOLUME_OVERRIDE : 1,
+      onRetry: resumeAudio
+    });
+    if (video) {
+      setupAudioAnalyser(video);
       return;
     }
   }
@@ -135,6 +111,5 @@ async function loadBackgrounds() {
   bgIndex = 0;
   applyBgVisuals(bgFront, bgList[0]);
   bgFront.style.opacity = NO_INTRO ? 1 : 0;
-  if (NO_INTRO) bgFront.style.opacity = 1;
   if (bgList.length > 1) setInterval(rotateBackground, BG_ROTATION_MS);
 }

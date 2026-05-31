@@ -26,7 +26,8 @@ const THEMES = {
     nowPlaying: "Where Winds Meet",
   },
 };
-const THEME_ID = THEMES[(params.get("theme") || "").toLowerCase()] ? params.get("theme").toLowerCase() : "vladoms";
+const themeParam = (params.get("theme") || "").toLowerCase();
+const THEME_ID = THEMES[themeParam] ? themeParam : "vladoms";
 const THEME    = THEMES[THEME_ID];
 
 const OVERLAY = {
@@ -39,6 +40,21 @@ const OVERLAY = {
   onIntro(cb) { OVERLAY._intro.push(cb); },
 };
 window.OVERLAY = OVERLAY;
+
+function tryPlayElement(el, onPlay, onRetry) {
+  const p = el.play();
+  if (p && p.catch) {
+    p.catch(() => {
+      const resume = () => {
+        if (onRetry) onRetry();
+        const r = el.play();
+        if (r && r.then && onPlay) r.then(onPlay);
+        document.removeEventListener("click", resume);
+      };
+      document.addEventListener("click", resume, { once: true });
+    });
+  }
+}
 
 async function fileExists(url) {
   try {

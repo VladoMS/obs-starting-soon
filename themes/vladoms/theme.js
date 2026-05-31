@@ -99,14 +99,22 @@
       const s = Math.floor((ms || 0) / 1000);
       return pad2(Math.floor(s / 3600)) + ":" + pad2(Math.floor(s / 60) % 60) + ":" + pad2(s % 60);
     };
+    const enc = new TextEncoder();
+    async function sha256b64(str) {
+      const buf = await crypto.subtle.digest("SHA-256", enc.encode(str));
+      let bin = ""; new Uint8Array(buf).forEach((b) => (bin += String.fromCharCode(b)));
+      return btoa(bin);
+    }
     async function obsAuth(password, salt, challenge) {
-      const enc = new TextEncoder();
-      const sha256b64 = async (str) => {
-        const buf = await crypto.subtle.digest("SHA-256", enc.encode(str));
-        let bin = ""; new Uint8Array(buf).forEach((b) => (bin += String.fromCharCode(b)));
-        return btoa(bin);
-      };
       return await sha256b64((await sha256b64(password + salt)) + challenge);
+    }
+    async function handleHello(msg, ws) {
+      const d = { rpcVersion: 1, eventSubscriptions: 0 };
+      if (msg.d && msg.d.authentication) {
+        try { d.authentication = await obsAuth(OBS_PASSWORD, msg.d.authentication.salt, msg.d.authentication.challenge); }
+        catch (e) { console.warn("[obs] auth hash failed", e); }
+      }
+      ws.send(JSON.stringify({ op: 1, d }));
     }
     function connectOBS() {
       let ws;
@@ -118,51 +126,52 @@
         ws.send(JSON.stringify({ op: 6, d: { requestType: "GetStreamStatus", requestId: "ss" } }));
         ws.send(JSON.stringify({ op: 6, d: { requestType: "GetStats",        requestId: "st" } }));
       };
+      const handleIdentified = () => {
+        obsConnected = true;
+        poll();
+        pollTimer = setInterval(poll, 1000);
+      };
+      const handleStreamStatus = (r) => {
+        if (!r.outputActive) {
+          if (sigEl) { sigEl.textContent = "STANDBY"; sigEl.className = "v"; }
+          if (brEl)  brEl.textContent = "0 kb/s";
+          if (dotEl) dotEl.style.background = "var(--amber)";
+          bytesPrev = null;
+        } else {
+          const c = r.outputCongestion;
+          let label = "LIVE", col = "var(--green)", cls = "v live";
+          if (c != null && c >= 0.7)      { label = "DROPPING"; col = "var(--red)";   cls = "v live"; }
+          else if (c != null && c >= 0.3) { label = "UNSTABLE"; col = "var(--amber)"; cls = "v"; }
+          if (sigEl) { sigEl.textContent = label; sigEl.className = cls; }
+          if (dotEl) dotEl.style.background = col;
+          const now = performance.now();
+          if (bytesPrev != null && tPrev) {
+            const dt = (now - tPrev) / 1000;
+            if (dt > 0 && brEl) {
+              const kbps = ((r.outputBytes - bytesPrev) * 8) / (dt * 1000);
+              brEl.textContent = Math.max(0, Math.round(kbps)) + " kb/s";
+            }
+          }
+          bytesPrev = r.outputBytes; tPrev = now;
+        }
+        if (uptEl) uptEl.textContent = fmtDur(r.outputDuration);
+        if (dropEl) {
+          const pct = r.outputTotalFrames ? (r.outputSkippedFrames / r.outputTotalFrames * 100) : 0;
+          dropEl.textContent = pct.toFixed(1) + " %";
+        }
+      };
+      const handleStats = (r) => {
+        if (fpsEl) fpsEl.textContent = (Math.round((r.activeFps || 0) * 10) / 10) + " fps";
+        if (cpuEl) cpuEl.textContent = (Math.round((r.cpuUsage || 0) * 10) / 10) + " %";
+      };
       ws.onmessage = async (ev) => {
         let msg; try { msg = JSON.parse(ev.data); } catch (e) { return; }
-        if (msg.op === 0) {
-          const d = { rpcVersion: 1, eventSubscriptions: 0 };
-          if (msg.d && msg.d.authentication) {
-            try { d.authentication = await obsAuth(OBS_PASSWORD, msg.d.authentication.salt, msg.d.authentication.challenge); }
-            catch (e) { console.warn("[obs] auth hash failed", e); }
-          }
-          ws.send(JSON.stringify({ op: 1, d }));
-        } else if (msg.op === 2) {
-          obsConnected = true; poll(); pollTimer = setInterval(poll, 1000);
-        } else if (msg.op === 7 && msg.d) {
+        if (msg.op === 0) await handleHello(msg, ws);
+        else if (msg.op === 2) handleIdentified();
+        else if (msg.op === 7 && msg.d) {
           const r = msg.d.responseData || {};
-          if (msg.d.requestType === "GetStreamStatus") {
-            if (!r.outputActive) {
-              if (sigEl) { sigEl.textContent = "STANDBY"; sigEl.className = "v"; }
-              if (brEl)  brEl.textContent = "0 kb/s";
-              if (dotEl) dotEl.style.background = "var(--amber)";
-              bytesPrev = null;
-            } else {
-              const c = r.outputCongestion;
-              let label = "LIVE", col = "var(--green)", cls = "v live";
-              if (c != null && c >= 0.7)      { label = "DROPPING"; col = "var(--red)";   cls = "v live"; }
-              else if (c != null && c >= 0.3) { label = "UNSTABLE"; col = "var(--amber)"; cls = "v"; }
-              if (sigEl) { sigEl.textContent = label; sigEl.className = cls; }
-              if (dotEl) dotEl.style.background = col;
-              const now = performance.now();
-              if (bytesPrev != null && tPrev) {
-                const dt = (now - tPrev) / 1000;
-                if (dt > 0 && brEl) {
-                  const kbps = ((r.outputBytes - bytesPrev) * 8) / (dt * 1000);
-                  brEl.textContent = Math.max(0, Math.round(kbps)) + " kb/s";
-                }
-              }
-              bytesPrev = r.outputBytes; tPrev = now;
-            }
-            if (uptEl) uptEl.textContent = fmtDur(r.outputDuration);
-            if (dropEl) {
-              const pct = r.outputTotalFrames ? (r.outputSkippedFrames / r.outputTotalFrames * 100) : 0;
-              dropEl.textContent = pct.toFixed(1) + " %";
-            }
-          } else if (msg.d.requestType === "GetStats") {
-            if (fpsEl) fpsEl.textContent = (Math.round((r.activeFps || 0) * 10) / 10) + " fps";
-            if (cpuEl) cpuEl.textContent = (Math.round((r.cpuUsage || 0) * 10) / 10) + " %";
-          }
+          if (msg.d.requestType === "GetStreamStatus") handleStreamStatus(r);
+          else if (msg.d.requestType === "GetStats") handleStats(r);
         }
       };
       ws.onclose = () => { obsConnected = false; if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } setTimeout(connectOBS, 5000); };

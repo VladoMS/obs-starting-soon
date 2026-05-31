@@ -36,8 +36,7 @@ function playCurrent() {
   if (p && p.catch) {
     p.catch(err => {
       console.warn("[audio] play() blocked — will retry on user gesture.", err);
-      const resume = () => { audio.play().catch(()=>{}); document.removeEventListener("click", resume); };
-      document.addEventListener("click", resume, { once: true });
+      tryPlayElement(audio);
     });
   }
 }

@@ -119,22 +119,16 @@
     if (npEl && O.nowPlaying !== lastNp) { lastNp = O.nowPlaying; npEl.textContent = O.nowPlaying || "STANDBY"; }
   });
 
-  // ---- intro fades (added to the shared timeline; or snapped when ?nointro=1) ----
+  // ---- intro fades (added to the shared timeline; progress(1) snaps when ?nointro=1) ----
   O.onIntro(function (tl, noIntro) {
-    if (noIntro) {
-      gsap.set("#grid-floor", { opacity: 0.30 });
-      gsap.set(["#hud-tl", "#hud-tr", "#hud-bl"], { opacity: 1 });
-      gsap.set("#hud-br", { opacity: 0.95 });
-      gsap.set([".nexus-corner", "#nexus-tx", "#nexus-core", "#nexus-hex-ring"], { opacity: 1 });
-      return;
-    }
-    tl.to("#grid-floor", { opacity: 0.30, duration: 1.6, ease: "sine.out" }, 0.4);
-    tl.to(["#hud-tl", "#hud-tr"], { opacity: 1, duration: 1.2, ease: "expo.out" }, 1.4);
-    tl.to(".nexus-corner",  { opacity: 1, duration: 1.2, ease: "expo.out" }, 1.4);
-    tl.to("#nexus-tx",      { opacity: 1, duration: 1.2, ease: "expo.out" }, 1.5);
-    tl.to("#hud-bl",        { opacity: 1, duration: 1.2, ease: "expo.out" }, 1.6);
-    tl.to("#nexus-core",    { opacity: 1, duration: 1.2, ease: "expo.out" }, 1.7);
-    tl.to("#hud-br",        { opacity: 0.95, duration: 1.2, ease: "expo.out" }, 1.6);
-    tl.to("#nexus-hex-ring",{ opacity: 1, duration: 1.6, ease: "sine.out" }, 1.8);
+    const dur = noIntro ? 0 : 1;
+    tl.to("#grid-floor", { opacity: 0.30, duration: 1.6 * dur, ease: "sine.out" }, 0.4);
+    tl.to(["#hud-tl", "#hud-tr"], { opacity: 1, duration: 1.2 * dur, ease: "expo.out" }, 1.4);
+    tl.to(".nexus-corner",  { opacity: 1, duration: 1.2 * dur, ease: "expo.out" }, 1.4);
+    tl.to("#nexus-tx",      { opacity: 1, duration: 1.2 * dur, ease: "expo.out" }, 1.5);
+    tl.to("#hud-bl",        { opacity: 1, duration: 1.2 * dur, ease: "expo.out" }, 1.6);
+    tl.to("#nexus-core",    { opacity: 1, duration: 1.2 * dur, ease: "expo.out" }, 1.7);
+    tl.to("#hud-br",        { opacity: 0.95, duration: 1.2 * dur, ease: "expo.out" }, 1.6);
+    tl.to("#nexus-hex-ring",{ opacity: 1, duration: 1.6 * dur, ease: "sine.out" }, 1.8);
   });
 })();
