@@ -2,7 +2,8 @@
   const target = document.getElementById("headline");
   const slice  = document.getElementById("headline-slice");
   slice.textContent = HEADLINE_TEXT;
-  for (const ch of HEADLINE_TEXT) {
+
+  function appendChar(parent, ch) {
     const span = document.createElement("span");
     span.className = "ch";
     if (ch === " ") {
@@ -11,15 +12,40 @@
     } else {
       span.textContent = ch;
     }
-    target.appendChild(span);
+    parent.appendChild(span);
+    return span;
   }
+
+  if (THEME_ID === "kaiyo-v4") {
+    const words = HEADLINE_TEXT.trim().split(/\s+/).filter(Boolean);
+    words.forEach((word, wi) => {
+      const wordSpan = document.createElement("span");
+      wordSpan.className = "word";
+      for (const ch of word) appendChar(wordSpan, ch);
+      target.appendChild(wordSpan);
+      if (wi < words.length - 1) {
+        const space = document.createElement("span");
+        space.className = "gap-space";
+        space.innerHTML = "&nbsp;";
+        target.appendChild(space);
+      }
+    });
+  } else {
+    for (const ch of HEADLINE_TEXT) appendChar(target, ch);
+  }
+
   const fit = () => {
     const col = document.querySelector(".center-col");
     const maxW = (col && col.clientWidth > 0) ? col.clientWidth : 1380;
     const cs = getComputedStyle(target);
     let size = parseFloat(cs.fontSize) || 96;
     const minSize = THEME_ID === "kaiyo-v4" ? 28 : 48;
-    while (target.scrollWidth > maxW && size > minSize) {
+    const overflows = () => {
+      if (target.scrollWidth > maxW) return true;
+      if (THEME_ID !== "kaiyo-v4") return false;
+      return Array.from(target.querySelectorAll(".word")).some(w => w.scrollWidth > maxW);
+    };
+    while (overflows() && size > minSize) {
       size -= 4;
       target.style.fontSize = size + "px";
       slice.style.fontSize = size + "px";

@@ -87,6 +87,11 @@ html.theme-kaiyo-v4 .headline-wrap::after {
 
 html.theme-kaiyo-v4 .headline-slice { text-align: left; }
 
+html.theme-kaiyo-v4 .headline .word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
 html.theme-kaiyo-v4 .headline,
 html.theme-kaiyo-v4 .headline-slice {
   font-family: "Orbitron", sans-serif;
@@ -94,7 +99,8 @@ html.theme-kaiyo-v4 .headline-slice {
   font-size: 72px;
   max-width: 100%;
   white-space: normal;
-  word-break: break-word;
+  overflow-wrap: normal;
+  word-break: normal;
   line-height: 1.12;
   letter-spacing: 0.14em;
   color: #f8fcff;
