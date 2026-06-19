@@ -188,6 +188,20 @@ html, body {
     3px 0 0 #00f6ff;
   will-change: clip-path, transform;
 }
+
+/* ?notextfx=1 — static headline, no audio-reactive glitch / RGB / slice */
+html.no-text-fx .headline {
+  transform: none;
+  --glitch-x: 0px;
+  --glitch-sk: 0deg;
+  --rgb-r-x: 0px;
+  --rgb-r-y: 0px;
+  --rgb-c-x: 0px;
+  --rgb-c-y: 0px;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
+}
+html.no-text-fx .headline-slice { display: none; }
+
 .headline .ch {
   display: inline-block;
   opacity: 0;

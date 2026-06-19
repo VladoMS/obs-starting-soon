@@ -3,6 +3,7 @@ const Q_PARAM        = params.get("q");
 const HEADLINE_TEXT  = (Q_PARAM == null ? "STARTING SOON" : Q_PARAM).toUpperCase();
 const BG_ROTATION_MS = (parseFloat(params.get("bg")) || 10) * 1000;
 const NO_FX          = params.get("nofx") === "1";
+const NO_TEXT_FX     = params.get("notextfx") === "1";
 const NO_INTRO       = params.get("nointro") !== "0";
 const VOLUME_OVERRIDE= params.get("volume") != null ? parseFloat(params.get("volume")) : null;
 
@@ -24,6 +25,14 @@ const THEMES = {
     hud: "eve", rgbLine: "54, 211, 154",
     bg: { mode: "video-audio", video: "themes/wwm/where-winds-meet.mp4" },
     nowPlaying: "Where Winds Meet",
+  },
+  "kaiyo-v4": {
+    hud: "synthwave", rgbLine: "255, 43, 214",
+    silent: true,
+    bg: {
+      mode: "video-muted",
+      video: "themes/kaiyo-v4/kaiyo-v4-intermision.mp4",
+    },
   },
 };
 const themeParam = (params.get("theme") || "").toLowerCase();

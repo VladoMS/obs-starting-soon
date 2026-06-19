@@ -14,8 +14,12 @@
     target.appendChild(span);
   }
   const fit = () => {
-    let size = 96;
-    while (target.scrollWidth > 1380 && size > 48) {
+    const col = document.querySelector(".center-col");
+    const maxW = (col && col.clientWidth > 0) ? col.clientWidth : 1380;
+    const cs = getComputedStyle(target);
+    let size = parseFloat(cs.fontSize) || 96;
+    const minSize = THEME_ID === "kaiyo-v4" ? 28 : 48;
+    while (target.scrollWidth > maxW && size > minSize) {
       size -= 4;
       target.style.fontSize = size + "px";
       slice.style.fontSize = size + "px";
@@ -138,9 +142,11 @@ function tick(rafNow) {
   const live = analyser && analyserMedia && !analyserMedia.paused && analyserMedia.currentTime > 0;
 
   const env = { ...computeEnvelopes(live, elapsed), nowMs, elapsed };
-  applyHeadlineGlitch(env.holdBass);
-  applyRgbSplit(env.mid, env.holdMid);
-  applySlice(env.treble, env.holdTreble);
+  if (!NO_TEXT_FX) {
+    applyHeadlineGlitch(env.holdBass);
+    applyRgbSplit(env.mid, env.holdMid);
+    applySlice(env.treble, env.holdTreble);
+  }
 
   for (let i = 0; i < OVERLAY._tick.length; i++) OVERLAY._tick[i](env);
   requestAnimationFrame(tick);
@@ -153,6 +159,11 @@ if (THEME.bg.mode === "video-audio") {
     OVERLAY.nowPlaying = THEME.nowPlaying;
     document.getElementById("now-playing").textContent = THEME.nowPlaying;
   }
-} else {
+} else if (!THEME.silent) {
   loadPlaylist();
+} else {
+  const trackEl = document.getElementById("track");
+  trackEl.removeAttribute("src");
+  trackEl.pause();
+  document.getElementById("now-playing").textContent = "—";
 }

@@ -14,6 +14,7 @@
         ?q=BE%20RIGHT%20BACK   override headline (auto-shrinks)
         ?bg=15                 background rotation seconds (default 10)
         ?nofx=1                disable scanlines + grain (cleaner look)
+        ?notextfx=1            disable headline glitch / RGB split / slice
         ?volume=0.5            override default volume (0..1)
         ?nointro=0             play the entrance animation (default: skipped)
         ?theme=ID              choose a preset (default "vladoms"):
@@ -26,6 +27,8 @@
                                          looping themes/kaiyo/ disco video + single KISSA track.
                                wwm     → Eve HUD recolored to wuxia jade/gold over the looping
                                          themes/wwm/ "Where Winds Meet" video (song from file).
+                               kaiyo-v4 → minimal intermission: looping rooftop video, headline
+                                         upper-left, no HUD chrome, silent (no audio).
                                (Replaces the old ?style / ?version params.)
 
       Content lives in:
@@ -52,11 +55,14 @@
           own folder: themes/<id>/theme.css. Keep __cfg in sync with the THEMES object in
           the main script below. -->
     <script>try{
-      var __t=(new URLSearchParams(location.search).get("theme")||"vladoms").toLowerCase();
+      var __p=new URLSearchParams(location.search);
+      var __t=(__p.get("theme")||"vladoms").toLowerCase();
+      if(__p.get("notextfx")==="1")document.documentElement.classList.add("no-text-fx");
       var __cfg={
         vladoms:{cls:["hud-eve"],               css:["themes/vladoms/theme.css"],               hud:"themes/vladoms/hud.html", js:["themes/vladoms/theme.js"]},
         kaiyo:  {cls:[],                         css:["themes/kaiyo/theme.css"],                 hud:"themes/kaiyo/hud.html",   js:["themes/kaiyo/theme.js"]},
-        wwm:    {cls:["theme-wwm"],              css:["themes/wwm/theme.css"],                   hud:"themes/wwm/hud.html"}
+        wwm:    {cls:["theme-wwm"],              css:["themes/wwm/theme.css"],                   hud:"themes/wwm/hud.html"},
+        "kaiyo-v4":{cls:["theme-kaiyo-v4"],      css:["themes/kaiyo-v4/theme.css"],              hud:"themes/kaiyo-v4/hud.html"}
       };
       var __c=__cfg[__t]||__cfg.vladoms;
       __c.cls.forEach(function(k){document.documentElement.classList.add(k);});

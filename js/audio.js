@@ -42,6 +42,7 @@ function playCurrent() {
 }
 
 async function loadPlaylist() {
+  if (THEME.silent) return;
   if (THEME.track && await fileExists(THEME.track.src)) {
     playlist = [THEME.track];
     trackIdx = 0;

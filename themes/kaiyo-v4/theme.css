@@ -1,0 +1,127 @@
+/* ==========================================================================
+   themes/kaiyo-v4/theme.css — KAIYO v4 intermission — standalone theme
+   Activated by html.theme-kaiyo-v4 (set by the head bootstrap for ?theme=kaiyo-v4).
+   Self-contained: builds only on core.css, no dependency on other theme HUDs.
+
+   Design intent: fullscreen looping rooftop video is the star. Headline sits in
+   the upper-left negative space, left of the character. No HUD chrome, no audio.
+   ========================================================================== */
+
+/* Safety net: hide other themes' chrome in case they leak into the DOM. */
+html.theme-kaiyo-v4 .hud,
+html.theme-kaiyo-v4 .hud-br,
+html.theme-kaiyo-v4 .nexus-tx,
+html.theme-kaiyo-v4 .nexus-hex-ring,
+html.theme-kaiyo-v4 .nexus-core,
+html.theme-kaiyo-v4 .nexus-corner,
+html.theme-kaiyo-v4 .grid-floor,
+html.theme-kaiyo-v4 #eve-hud,
+html.theme-kaiyo-v4 .eq-v2,
+html.theme-kaiyo-v4 #wwm-hud { display: none !important; }
+
+html.theme-kaiyo-v4, html.theme-kaiyo-v4 body { background: #07080a; }
+html.theme-kaiyo-v4 [data-composition-id="main"] { background: #07080a; }
+
+/* Light vignette — edges only, keep the cityscape clear. */
+html.theme-kaiyo-v4 .bg-tint {
+  background:
+    linear-gradient(180deg, rgba(7,8,10,0.45) 0%, rgba(7,8,10,0.0) 18%, rgba(7,8,10,0.0) 78%, rgba(7,8,10,0.55) 100%),
+    radial-gradient(ellipse 110% 85% at 50% 50%, transparent 55%, rgba(7,8,10,0.35) 100%);
+}
+
+/* ---- Headline in upper-left, left of character ---- */
+html.theme-kaiyo-v4 .center-col {
+  left: 72px;
+  right: 42%;
+  top: 22%;
+  bottom: auto;
+  height: auto;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+/* Broadcast kicker — matches kaiyo HUD top-left readout */
+html.theme-kaiyo-v4 .center-col::before {
+  content: "VLADO_MS AKA KAIYO//SHARD";
+  display: block;
+  margin-bottom: 14px;
+  padding-left: 20px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #f5c542;
+  text-shadow:
+    -1px -1px 0 rgba(0, 0, 0, 0.85),
+    1px -1px 0 rgba(0, 0, 0, 0.85),
+    -1px 1px 0 rgba(0, 0, 0, 0.85),
+    1px 1px 0 rgba(0, 0, 0, 0.85),
+    0 2px 10px rgba(0, 0, 0, 0.9),
+    0 0 12px rgba(245, 197, 66, 0.4);
+  background:
+    radial-gradient(circle at 4px 50%, #f5c542 0 4px, transparent 4px);
+  background-repeat: no-repeat;
+}
+
+html.theme-kaiyo-v4 .headline-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  padding-left: 20px;
+  text-align: left;
+  border-left: 2px solid rgba(245, 197, 66, 0.45);
+}
+
+/* SYS/NET-style gradient rule under headline */
+html.theme-kaiyo-v4 .headline-wrap::after {
+  content: "";
+  display: block;
+  width: min(100%, 320px);
+  height: 1px;
+  margin-top: 18px;
+  background: linear-gradient(90deg, rgba(245, 197, 66, 0.8), rgba(0, 240, 255, 0.45) 55%, transparent);
+  box-shadow: 0 0 8px rgba(245, 197, 66, 0.3);
+}
+
+html.theme-kaiyo-v4 .headline-slice { text-align: left; }
+
+html.theme-kaiyo-v4 .headline,
+html.theme-kaiyo-v4 .headline-slice {
+  font-family: "Orbitron", sans-serif;
+  font-weight: 800;
+  font-size: 72px;
+  max-width: 100%;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.12;
+  letter-spacing: 0.14em;
+  color: #f8fcff;
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.55);
+  paint-order: stroke fill;
+  text-shadow:
+    -2px -2px 0 rgba(0, 0, 0, 0.75),
+    2px -2px 0 rgba(0, 0, 0, 0.75),
+    -2px 2px 0 rgba(0, 0, 0, 0.75),
+    2px 2px 0 rgba(0, 0, 0, 0.75),
+    0 3px 12px rgba(0, 0, 0, 0.88),
+    0 6px 28px rgba(0, 0, 0, 0.72),
+    var(--rgb-r-x) var(--rgb-r-y) 0 rgba(255, 43, 214, 0.35),
+    var(--rgb-c-x) var(--rgb-c-y) 0 rgba(0, 240, 255, 0.3);
+}
+
+/* Static shard glow when ?notextfx=1 — outline + halo only, no panels */
+html.no-text-fx.theme-kaiyo-v4 .headline {
+  transform: none;
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.6);
+  text-shadow:
+    -2px -2px 0 rgba(0, 0, 0, 0.8),
+    2px -2px 0 rgba(0, 0, 0, 0.8),
+    -2px 2px 0 rgba(0, 0, 0, 0.8),
+    2px 2px 0 rgba(0, 0, 0, 0.8),
+    0 3px 14px rgba(0, 0, 0, 0.9),
+    0 6px 32px rgba(0, 0, 0, 0.78),
+    0 0 18px rgba(0, 240, 255, 0.18);
+}
+
