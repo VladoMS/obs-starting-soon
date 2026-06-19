@@ -59,8 +59,9 @@ async function setupVideoBackground(opts) {
   if (!await fileExists(opts.src)) return null;
   const v = document.getElementById("bg-video");
   v.style.display = "block";
+  v.style.transition = "none";
+  v.loop = opts.loop !== false;
   if (opts.muted != null) v.muted = opts.muted;
-  if (opts.loop) v.loop = true;
   if (opts.volume != null) v.volume = opts.volume;
   v.src = opts.src;
   const reveal = () => { v.style.opacity = "1"; };
@@ -71,7 +72,11 @@ async function setupVideoBackground(opts) {
 
 async function loadBackgrounds() {
   if (THEME.bg.mode === "video-muted") {
-    if (await setupVideoBackground({ src: THEME.bg.video, muted: true })) return;
+    if (await setupVideoBackground({
+      src: THEME.bg.video,
+      muted: true,
+      loop: true,
+    })) return;
     if (THEME.bg.plate && await fileExists(THEME.bg.plate)) {
       bgList = [{ id: THEME_ID, game: "", caption: "", src: THEME.bg.plate, tint: ["rgba(0,0,0,0)", "rgba(0,0,0,0)"] }];
       bgIndex = 0;

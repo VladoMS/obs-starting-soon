@@ -16,7 +16,7 @@
         ?nofx=1                disable scanlines + grain (cleaner look)
         ?notextfx=1            disable headline glitch / RGB split / slice
         ?volume=0.5            override default volume (0..1)
-        ?nointro=0             play the entrance animation (default: skipped)
+        ?nointro=0             play the entrance animation (default: intro skipped)
         ?theme=ID              choose a preset (default "vladoms"):
                                vladoms → "Eve" operator HUD (by @vlado_ms) over the rotating
                                          game backgrounds + shuffled playlist. Auto-connects
@@ -27,15 +27,17 @@
                                          looping themes/kaiyo/ disco video + single KISSA track.
                                wwm     → Eve HUD recolored to wuxia jade/gold over the looping
                                          themes/wwm/ "Where Winds Meet" video (song from file).
-                               kaiyo-v4 → minimal intermission: looping rooftop video, headline
-                                         upper-left, no HUD chrome, silent (no audio).
+                               kaiyo-v4 → minimal intermission: native-loop rooftop video,
+                                         upper-left headline (word wrap), no HUD chrome,
+                                         silent (no audio). Try ?nofx=1&notextfx=1.
                                (Replaces the old ?style / ?version params.)
 
-      Content lives in:
-        playlist.json          songs (sequential, shuffled, looped)
-        backgrounds.json       game-themed backgrounds (13 entries)
-        assets/backgrounds/    drop your own .jpg/.png per entry id
-        assets/songs/          drop song files here
+      Content lives in (per theme):
+        themes/vladoms/playlist.json     songs (shuffled, looped)
+        themes/vladoms/backgrounds.json  game-themed backgrounds
+        themes/vladoms/backgrounds/    drop .jpg/.png per entry id
+        themes/vladoms/songs/            drop song files here
+        themes/kaiyo-v4/                 intermission video + theme CSS
 
       OBS setup:
         - Add Browser Source → Local file → this index.html
@@ -52,8 +54,7 @@
     <!-- Theme bootstrap: apply the theme's <html> classes AND load its own CSS file(s)
          before paint, so there's no flash of the wrong skin and the HTML stays light
          (only the active theme's CSS is fetched). Each theme's chrome CSS lives in its
-          own folder: themes/<id>/theme.css. Keep __cfg in sync with the THEMES object in
-          the main script below. -->
+          own folder: themes/<id>/theme.css. Keep __cfg in sync with THEMES in js/config.js. -->
     <script>try{
       var __p=new URLSearchParams(location.search);
       var __t=(__p.get("theme")||"vladoms").toLowerCase();
